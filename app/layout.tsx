@@ -14,12 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VAAS Admin | Hostel Management",
+  title: "OSSTEL Admin | Hostel Management",
   description: "Admin dashboard for managing hostel owners and properties",
-  icons: {
-    icon: "/applogo.png",
-    apple: "/applogo.png",
-  },
 };
 
 export default function RootLayout({

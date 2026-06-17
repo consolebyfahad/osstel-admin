@@ -22,6 +22,7 @@ export interface AdminUser {
   id: string;
   name: string;
   phone: string;
+  userId?: string | null;
   role: string;
   avatarUrl?: string | null;
 }

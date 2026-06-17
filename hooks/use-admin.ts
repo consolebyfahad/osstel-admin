@@ -146,8 +146,8 @@ export function useLogin() {
   const setAuth = useAuthStore((s) => s.setAuth);
 
   return useMutation({
-    mutationFn: ({ phone, password }: { phone: string; password: string }) =>
-      apiLogin(phone, password),
+    mutationFn: ({ userId, password }: { userId: string; password: string }) =>
+      apiLogin(userId, password),
     onSuccess: (data) => {
       if (data.user.role !== "admin") {
         showApiError(new Error("Only admin users can access this panel"));

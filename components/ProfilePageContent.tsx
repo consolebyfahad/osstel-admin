@@ -106,11 +106,11 @@ export function ProfilePageContent() {
 
                 <div className="flex-1 space-y-3 text-center sm:text-left">
                   <div>
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="text-lg font-semibold text-foreground">
                       {name || user.name}
                     </p>
-                    <p className="text-sm text-gray-500">{user.phone}</p>
-                    <p className="text-xs text-gray-400 capitalize">
+                    <p className="text-sm text-muted-foreground">{user.phone}</p>
+                    <p className="text-xs text-muted-foreground capitalize">
                       Role: {user.role}
                     </p>
                   </div>
@@ -138,7 +138,7 @@ export function ProfilePageContent() {
                 </div>
               </div>
 
-              <div className="space-y-4 border-t border-gray-100 pt-6">
+              <div className="space-y-4 border-t border-border pt-6">
                 <div className="space-y-2">
                   <Label htmlFor="profile-name">Display Name</Label>
                   <Input
@@ -158,7 +158,7 @@ export function ProfilePageContent() {
                     id="profile-phone"
                     value={user.phone}
                     disabled
-                    className="bg-gray-50 text-gray-500"
+                    className="bg-muted/40 opacity-100 dark:text-[#f4f4f4]"
                   />
                 </div>
 
@@ -178,21 +178,21 @@ export function ProfilePageContent() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 Sign out of your admin account. You will need to sign in again to
                 access the dashboard.
               </p>
-              <div className="flex items-center gap-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
+              <div className="flex items-center gap-4 rounded-lg border border-border bg-muted/30 p-4">
                 <AdminAvatar
                   name={user.name}
                   avatarUrl={avatarUrl ?? storedAvatarUrl}
                   size="md"
                 />
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium text-gray-900 truncate">
+                  <p className="font-medium text-foreground truncate">
                     {name || user.name}
                   </p>
-                  <p className="text-sm text-gray-500 truncate">{user.phone}</p>
+                  <p className="text-sm text-muted-foreground truncate">{user.phone}</p>
                 </div>
                 <Button variant="destructive" onClick={handleLogout}>
                   <LogOut className="h-4 w-4" />

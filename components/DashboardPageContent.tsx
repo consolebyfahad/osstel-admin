@@ -9,11 +9,12 @@ import {
 } from "lucide-react";
 import { useDashboardStats } from "@/hooks/use-admin";
 import { Navbar } from "@/components/Navbar";
+import { PageError } from "@/components/PageError";
 import { PageLoader } from "@/components/PageLoader";
 import { StatCard } from "@/components/StatCard";
 
 export function DashboardPageContent() {
-  const { data: stats, isLoading, isError } = useDashboardStats();
+  const { data: stats, isLoading, isError, refetch } = useDashboardStats();
 
   if (isLoading) {
     return (
@@ -22,7 +23,7 @@ export function DashboardPageContent() {
           title="Dashboard"
           description="Overview of your hostel management platform"
         />
-        <PageLoader />
+        <PageLoader message="Loading dashboard stats..." />
       </>
     );
   }
@@ -31,9 +32,11 @@ export function DashboardPageContent() {
     return (
       <>
         <Navbar title="Dashboard" />
-        <div className="p-6 text-center text-sm text-red-600">
-          Failed to load dashboard stats.
-        </div>
+        <PageError
+          title="Failed to load dashboard"
+          message="We couldn't fetch dashboard stats. Check your connection and try again."
+          onRetry={() => refetch()}
+        />
       </>
     );
   }

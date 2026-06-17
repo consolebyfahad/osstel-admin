@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Lock, Phone } from "lucide-react";
+import { Eye, EyeOff, Lock, User } from "lucide-react";
 import { useLogin } from "@/hooks/use-admin";
 import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -13,14 +13,14 @@ import { Label } from "@/components/ui/label";
 export function LoginForm() {
   const router = useRouter();
   const loginMutation = useLogin();
-  const [phone, setPhone] = useState("03009999999");
+  const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await loginMutation.mutateAsync({ phone, password });
+      await loginMutation.mutateAsync({ userId, password });
       router.replace("/dashboard");
     } catch {
       // Error handled by mutation
@@ -44,16 +44,17 @@ export function LoginForm() {
         <div className="glass-card rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="userId">User ID</Label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="03009999999"
+                  id="userId"
+                  type="text"
+                  value={userId}
+                  onChange={(e) => setUserId(e.target.value)}
+                  placeholder="Enter your user ID"
                   className="pl-9"
+                  autoComplete="username"
                   required
                 />
               </div>
@@ -70,6 +71,7 @@ export function LoginForm() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   className="pl-9 pr-10"
+                  autoComplete="current-password"
                   required
                 />
                 <button
@@ -86,14 +88,14 @@ export function LoginForm() {
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loginMutation.isPending}
+            >
               {loginMutation.isPending ? "Signing in..." : "Sign In"}
             </Button>
           </form>
-
-          <p className="mt-6 text-center text-xs text-muted-foreground">
-            Demo: 03009999999 / admin123
-          </p>
         </div>
       </div>
     </div>

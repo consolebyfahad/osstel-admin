@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { AdminUser } from "@/lib/types";
 
-const PROFILE_KEY = "vaas_admin_profile";
+const PROFILE_KEY = "osstel_admin_profile";
 
 interface AuthState {
   accessToken: string | null;
@@ -38,7 +38,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: () => !!get().accessToken,
     }),
     {
-      name: "vaas-admin-auth",
+      name: "osstel-admin-auth",
       partialize: (state) => ({
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,

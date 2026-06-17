@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import appLogo from "@/app/applogo.png";
-import vaasLogo from "@/app/vaaslogo.png";
+import osstelLogo from "@/app/applogo.png";
 
 interface LogoProps {
   variant?: "icon" | "full";
@@ -22,8 +21,8 @@ export function Logo({ variant = "full", size = "md", className }: LogoProps) {
     const iconSize = sizes[size].icon;
     return (
       <Image
-        src={appLogo}
-        alt="VAAS"
+        src="/applogo.png"
+        alt="OSSTEL"
         width={iconSize}
         height={iconSize}
         className={cn("object-contain", className)}
@@ -35,8 +34,8 @@ export function Logo({ variant = "full", size = "md", className }: LogoProps) {
   const { width, height } = sizes[size].full;
   return (
     <Image
-      src={vaasLogo}
-      alt="VAAS Admin"
+      src={osstelLogo}
+      alt="OSSTEL Admin"
       width={width}
       height={height}
       className={cn("object-contain", className)}

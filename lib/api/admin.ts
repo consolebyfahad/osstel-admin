@@ -17,10 +17,10 @@ import type {
   UpdateSupportStatusPayload,
 } from "@/lib/types";
 
-export async function login(phone: string, password: string) {
+export async function login(userId: string, password: string) {
   return apiClient<LoginResponse>("/auth/login", {
     method: "POST",
-    body: JSON.stringify({ phone, password }),
+    body: JSON.stringify({ userId, password }),
   });
 }
 

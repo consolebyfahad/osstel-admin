@@ -152,16 +152,140 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.5s ease, color 0.4s ease;
 }
 
-/* ─── App mesh background (light airy gradient + orbs) ─── */
+/* ─── Theme switch: circular reveal (View Transition API) ─── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  animation: theme-circle-reveal 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes theme-circle-reveal {
+  from {
+    clip-path: circle(0px at var(--theme-reveal-x) var(--theme-reveal-y));
+  }
+  to {
+    clip-path: circle(var(--theme-reveal-r) at var(--theme-reveal-x) var(--theme-reveal-y));
+  }
+}
+
+/* Fallback smooth crossfade when View Transition unavailable */
+html.theme-transition-active:not(:has(::view-transition)) body {
+  animation: theme-fade-pulse 0.55s ease;
+}
+
+@keyframes theme-fade-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.92;
+  }
+}
+
+/* Smooth color transitions on glass surfaces during theme change */
+html.theme-transition-active .glass-card,
+html.theme-transition-active .glass-sidebar,
+html.theme-transition-active .glass-nav,
+html.theme-transition-active .glass-bubble,
+html.theme-transition-active .bg-brand-gradient {
+  transition:
+    background 0.5s ease,
+    background-color 0.5s ease,
+    border-color 0.4s ease,
+    box-shadow 0.5s ease;
+}
+
+/* ─── App mesh background (animated orbs + gradient) ─── */
 .bg-brand-gradient {
   position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background:
     radial-gradient(ellipse 90% 60% at 8% -8%, var(--orb-primary), transparent 55%),
     radial-gradient(ellipse 70% 50% at 95% 5%, var(--orb-secondary), transparent 50%),
     radial-gradient(ellipse 50% 40% at 50% 100%, var(--orb-accent), transparent 60%),
     linear-gradient(165deg, var(--gradient-from) 0%, var(--gradient-mid) 42%, var(--gradient-to) 100%);
+  transition: background 0.8s ease;
+}
+
+.bg-brand-gradient::before,
+.bg-brand-gradient::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(60px);
+  opacity: 0.55;
+  transition: opacity 0.8s ease, background 0.8s ease;
+}
+
+.bg-brand-gradient::before {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  left: -80px;
+  background: var(--orb-primary);
+  animation: orb-float-a 18s ease-in-out infinite;
+}
+
+.bg-brand-gradient::after {
+  width: 360px;
+  height: 360px;
+  bottom: -100px;
+  right: -60px;
+  background: var(--orb-secondary);
+  animation: orb-float-b 22s ease-in-out infinite;
+}
+
+@keyframes orb-float-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, 30px) scale(1.08);
+  }
+  66% {
+    transform: translate(-20px, 50px) scale(0.95);
+  }
+}
+
+@keyframes orb-float-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-50px, -40px) scale(1.12);
+  }
+}
+
+/* Night mode: deeper, slower orbs */
+.dark .bg-brand-gradient::before,
+.dark .bg-brand-gradient::after {
+  opacity: 0.35;
+  filter: blur(80px);
+}
+
+.dark .bg-brand-gradient::before {
+  animation-duration: 26s;
+}
+
+.dark .bg-brand-gradient::after {
+  animation-duration: 30s;
 }
 
 /* ─── iOS glass surfaces ─── */
@@ -193,6 +317,10 @@ body {
   -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+  transition:
+    background 0.5s ease,
+    border-color 0.4s ease,
+    box-shadow 0.5s ease;
 }
 
 .glass-sidebar {
@@ -201,6 +329,10 @@ body {
   -webkit-backdrop-filter: blur(32px) saturate(180%);
   border-right: 1px solid var(--glass-border-subtle);
   box-shadow: 4px 0 24px rgba(93, 183, 222, 0.04);
+  transition:
+    background 0.5s ease,
+    border-color 0.4s ease,
+    box-shadow 0.5s ease;
 }
 
 .dark .glass-sidebar {
@@ -213,6 +345,10 @@ body {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--glass-border-subtle);
   box-shadow: 0 4px 24px rgba(93, 183, 222, 0.05);
+  transition:
+    background 0.5s ease,
+    border-color 0.4s ease,
+    box-shadow 0.5s ease;
 }
 
 .glass-bubble {
@@ -234,6 +370,7 @@ body {
 }
 
 .dark .glass-input {
+  color: #f4f4f4;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 }
 

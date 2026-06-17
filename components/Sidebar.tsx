@@ -76,7 +76,7 @@ export function Sidebar({ mobileOpen = false, onNavigate }: SidebarProps) {
       <div className="flex h-16 items-center gap-3 border-b border-border/50 px-6">
         <Logo variant="icon" size="sm" />
         <div className="min-w-0">
-          <p className="text-sm font-bold text-foreground">VAAS Admin</p>
+          <p className="text-sm font-bold text-foreground">OSSTEL Admin</p>
           <p className="text-xs text-muted-foreground">Hostel Management</p>
         </div>
       </div>
