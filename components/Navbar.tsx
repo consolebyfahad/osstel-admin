@@ -1,6 +1,7 @@
 "use client";
 
-import { Bell, Search } from "lucide-react";
+import { Search } from "lucide-react";
+import { AdminNotifications } from "@/components/AdminNotifications";
 import { UserMenu } from "@/components/UserMenu";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Input } from "@/components/ui/input";
@@ -30,12 +31,7 @@ export function Navbar({ title, description }: NavbarProps) {
               readOnly
             />
           </div>
-          <button
-            type="button"
-            className="glass-bubble flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-all hover:text-foreground hover:scale-105"
-          >
-            <Bell className="h-4 w-4" />
-          </button>
+          <AdminNotifications />
           <ThemeToggle />
           <UserMenu />
         </div>

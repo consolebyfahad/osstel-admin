@@ -38,6 +38,7 @@ export interface DashboardStats {
   blockedOwners: number;
   totalHostels: number;
   pendingPlanRequests: number;
+  openSupportRequests?: number;
   newContactInquiries?: number;
   standardOwners: number;
   premiumOwners: number;

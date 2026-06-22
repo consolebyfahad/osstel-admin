@@ -1,36 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Mail, Phone, Send } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Mail, MessageCircle, Phone } from "lucide-react";
 import {
   useContactInquiry,
-  useReplyContactInquiry,
   useUpdateContactInquiryStatus,
 } from "@/hooks/use-admin";
 import { formatDate } from "@/lib/utils";
-import type { ContactInquiryStatus } from "@/lib/types";
 import { Navbar } from "@/components/Navbar";
 import { PageLoader } from "@/components/PageLoader";
 import { ContactInquiryStatusBadge } from "@/components/ContactInquiryStatusBadge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
-const statusOptions: ContactInquiryStatus[] = [
-  "new",
-  "in_progress",
-  "replied",
-  "closed",
-];
+function whatsAppLink(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  const normalized = digits.startsWith("92")
+    ? digits
+    : digits.startsWith("0")
+      ? `92${digits.slice(1)}`
+      : digits;
+  return `https://wa.me/${normalized}`;
+}
 
 interface ContactInquiryDetailPageContentProps {
   id: string;
@@ -40,32 +31,12 @@ export function ContactInquiryDetailPageContent({
   id,
 }: ContactInquiryDetailPageContentProps) {
   const { data, isLoading } = useContactInquiry(id);
-  const replyMutation = useReplyContactInquiry();
   const statusMutation = useUpdateContactInquiryStatus();
 
   const inquiry = data?.inquiry;
 
-  const [adminReply, setAdminReply] = useState("");
-  const [status, setStatus] = useState<ContactInquiryStatus>("new");
-
-  useEffect(() => {
-    if (inquiry) {
-      setAdminReply(inquiry.adminReply ?? "");
-      setStatus(inquiry.status);
-    }
-  }, [inquiry]);
-
-  const handleReply = async () => {
-    if (!adminReply.trim()) return;
-    await replyMutation.mutateAsync({ id, adminReply });
-  };
-
-  const handleUpdateStatus = async () => {
-    await statusMutation.mutateAsync({
-      id,
-      adminReply: adminReply.trim() || undefined,
-      status,
-    });
+  const handleMarkHandled = async () => {
+    await statusMutation.mutateAsync({ id, status: "closed" });
   };
 
   if (isLoading) {
@@ -88,13 +59,11 @@ export function ContactInquiryDetailPageContent({
     );
   }
 
-  const isSubmitting = replyMutation.isPending || statusMutation.isPending;
-
   return (
     <>
       <Navbar
         title={inquiry.name}
-        description="Website contact form submission"
+        description="Contact the visitor directly by phone, email, or WhatsApp"
       />
 
       <div className="p-6 space-y-6 max-w-3xl">
@@ -124,99 +93,62 @@ export function ContactInquiryDetailPageContent({
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <p className="text-xs text-muted-foreground">Phone</p>
-                <a
-                  href={`tel:${inquiry.phone}`}
-                  className="inline-flex items-center gap-2 font-medium text-primary hover:underline"
-                >
-                  <Phone className="h-4 w-4" />
-                  {inquiry.phone}
-                </a>
-              </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Email</p>
-                <a
-                  href={`mailto:${inquiry.email}`}
-                  className="inline-flex items-center gap-2 font-medium text-primary hover:underline"
-                >
-                  <Mail className="h-4 w-4" />
-                  {inquiry.email}
-                </a>
-              </div>
-            </div>
-
             <div>
               <p className="text-xs text-muted-foreground mb-1">Message</p>
               <p className="rounded-lg border border-border bg-muted/30 p-4 text-sm leading-relaxed whitespace-pre-wrap">
                 {inquiry.message}
               </p>
             </div>
-
-            {inquiry.adminReply && (
-              <div>
-                <p className="text-xs text-muted-foreground mb-1">
-                  Previous admin reply
-                </p>
-                <p className="rounded-lg border border-primary-200 bg-primary-100/50 p-4 text-sm whitespace-pre-wrap">
-                  {inquiry.adminReply}
-                </p>
-              </div>
-            )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Admin Response</CardTitle>
+            <CardTitle className="text-base">Contact Visitor</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="admin-reply">Internal reply / notes</Label>
-              <Textarea
-                id="admin-reply"
-                value={adminReply}
-                onChange={(e) => setAdminReply(e.target.value)}
-                placeholder="Follow-up notes or reply sent to the visitor..."
-                rows={4}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Status</Label>
-              <Select
-                value={status}
-                onValueChange={(v) => setStatus(v as ContactInquiryStatus)}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {statusOptions.map((s) => (
-                    <SelectItem key={s} value={s}>
-                      {s.replace("_", " ")}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
+          <CardContent className="space-y-3">
+            <p className="text-sm text-muted-foreground">
+              Reply outside the admin panel using the details below.
+            </p>
             <div className="flex flex-wrap gap-3">
-              <Button
-                onClick={handleReply}
-                disabled={isSubmitting || !adminReply.trim()}
-                variant="outline"
-              >
-                <Send className="h-4 w-4" />
-                Save Reply
+              <Button asChild>
+                <a href={`tel:${inquiry.phone}`}>
+                  <Phone className="h-4 w-4" />
+                  Call {inquiry.phone}
+                </a>
               </Button>
-              <Button onClick={handleUpdateStatus} disabled={isSubmitting}>
-                {isSubmitting ? "Saving..." : "Update Status"}
+              <Button variant="outline" asChild>
+                <a href={`mailto:${inquiry.email}`}>
+                  <Mail className="h-4 w-4" />
+                  Email
+                </a>
+              </Button>
+              <Button variant="outline" asChild>
+                <a
+                  href={whatsAppLink(inquiry.phone)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  WhatsApp
+                </a>
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground">{inquiry.email}</p>
           </CardContent>
         </Card>
+
+        {inquiry.status !== "closed" && (
+          <div className="flex justify-end">
+            <Button
+              onClick={handleMarkHandled}
+              disabled={statusMutation.isPending}
+            >
+              <CheckCircle2 className="h-4 w-4" />
+              {statusMutation.isPending ? "Saving..." : "Mark as handled"}
+            </Button>
+          </div>
+        )}
       </div>
     </>
   );

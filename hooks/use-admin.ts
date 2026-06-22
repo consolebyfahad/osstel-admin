@@ -231,9 +231,16 @@ export function useContactInquiries(params: ContactInquiriesListParams) {
 }
 
 export function useContactInquiry(id: string) {
+  const queryClient = useQueryClient();
+
   return useQuery({
     queryKey: ["contact-inquiry", id],
-    queryFn: () => getContactInquiry(id),
+    queryFn: async () => {
+      const result = await getContactInquiry(id);
+      await queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+      await queryClient.invalidateQueries({ queryKey: ["contact-inquiries"] });
+      return result;
+    },
     enabled: !!id,
   });
 }
@@ -268,9 +275,13 @@ export function useUpdateContactInquiryStatus() {
       id: string;
       adminReply?: string;
       status: ContactInquiryStatus;
-    }) => updateContactInquiryStatus(id, { adminReply, status }),
+    }) => updateContactInquiryStatus(id, { status }),
     onSuccess: (_, variables) => {
-      showApiSuccess("Contact inquiry updated");
+      showApiSuccess(
+        variables.status === "closed"
+          ? "Inquiry marked as handled"
+          : "Inquiry updated"
+      );
       queryClient.invalidateQueries({ queryKey: ["contact-inquiries"] });
       queryClient.invalidateQueries({
         queryKey: ["contact-inquiry", variables.id],

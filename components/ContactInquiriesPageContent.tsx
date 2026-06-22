@@ -24,9 +24,8 @@ import { cn } from "@/lib/utils";
 
 const filterTabs = [
   { value: "new", label: "New" },
-  { value: "in_progress", label: "In Progress" },
-  { value: "replied", label: "Replied" },
-  { value: "closed", label: "Closed" },
+  { value: "in_progress", label: "Seen" },
+  { value: "closed", label: "Handled" },
   { value: "all", label: "All" },
 ] as const;
 

@@ -12,7 +12,7 @@ import {
   Users,
   Building2,
 } from "lucide-react";
-import { useContactInquiries, useDashboardStats, useSupportRequests } from "@/hooks/use-admin";
+import { useDashboardStats } from "@/hooks/use-admin";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { AdminAvatar } from "@/components/AdminAvatar";
 import { Logo } from "@/components/Logo";
@@ -53,20 +53,8 @@ export function Sidebar({ mobileOpen = false, onNavigate }: SidebarProps) {
   const router = useRouter();
   const { user, avatarUrl, logout } = useAuth();
   const { data: stats } = useDashboardStats();
-  const { data: openSupport } = useSupportRequests({
-    page: 1,
-    limit: 1,
-    status: "open",
-  });
-  const { data: pendingSupport } = useSupportRequests({
-    page: 1,
-    limit: 1,
-    status: "pending",
-  });
 
-  const supportBadgeCount =
-    (openSupport?.pagination?.total ?? 0) +
-    (pendingSupport?.pagination?.total ?? 0);
+  const supportBadgeCount = stats?.openSupportRequests ?? 0;
 
   const handleLogout = () => {
     logout();

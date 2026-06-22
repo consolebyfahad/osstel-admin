@@ -11,15 +11,15 @@ const statusConfig: Record<
     className: "bg-primary-100 text-primary border-primary-200",
   },
   in_progress: {
-    label: "In Progress",
+    label: "Seen",
     className: "bg-secondary-100 text-secondary-foreground border-secondary-200",
   },
   replied: {
-    label: "Replied",
+    label: "Handled",
     className: "bg-success/20 text-success border-success/30",
   },
   closed: {
-    label: "Closed",
+    label: "Handled",
     className: "bg-muted text-muted-foreground border-border",
   },
 };

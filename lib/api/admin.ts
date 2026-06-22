@@ -43,6 +43,7 @@ export async function getStats() {
     blockedOwners: raw.blockedOwners ?? 0,
     totalHostels: raw.totalHostels ?? 0,
     pendingPlanRequests: raw.pendingPlanRequests ?? 0,
+    openSupportRequests: raw.openSupportRequests ?? 0,
     newContactInquiries: raw.newContactInquiries ?? 0,
     standardOwners: raw.standardOwners ?? 0,
     premiumOwners: raw.premiumOwners ?? 0,
