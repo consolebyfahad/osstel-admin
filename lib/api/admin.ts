@@ -14,6 +14,10 @@ import type {
   SubscriptionPlan,
   SupportRequest,
   SupportRequestsListParams,
+  ContactInquiry,
+  ContactInquiriesListParams,
+  ContactInquiryStatus,
+  UpdateContactInquiryStatusPayload,
   UpdateSupportStatusPayload,
 } from "@/lib/types";
 
@@ -39,6 +43,7 @@ export async function getStats() {
     blockedOwners: raw.blockedOwners ?? 0,
     totalHostels: raw.totalHostels ?? 0,
     pendingPlanRequests: raw.pendingPlanRequests ?? 0,
+    newContactInquiries: raw.newContactInquiries ?? 0,
     standardOwners: raw.standardOwners ?? 0,
     premiumOwners: raw.premiumOwners ?? 0,
   };
@@ -194,6 +199,65 @@ export async function updateSupportRequestStatus(
 ) {
   return apiClient<{ request: SupportRequest }>(
     `/admin/support-requests/${id}/status`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    }
+  );
+}
+
+export async function getContactInquiries(
+  params: ContactInquiriesListParams = {}
+) {
+  const searchParams = new URLSearchParams();
+  if (params.page) searchParams.set("page", String(params.page));
+  if (params.limit) searchParams.set("limit", String(params.limit));
+  if (params.status && params.status !== "all")
+    searchParams.set("status", params.status);
+  if (params.search) searchParams.set("search", params.search);
+
+  const query = searchParams.toString();
+  return apiClient<{ inquiries: ContactInquiry[]; pagination: Pagination }>(
+    `/admin/contact-inquiries${query ? `?${query}` : ""}`
+  );
+}
+
+export async function getContactInquiry(id: string) {
+  const data = await apiClient<
+    | { inquiry: ContactInquiry }
+    | { contactInquiry: ContactInquiry }
+    | ContactInquiry
+  >(`/admin/contact-inquiries/${id}`);
+
+  if (typeof data === "object" && data !== null && "inquiry" in data) {
+    return { inquiry: data.inquiry };
+  }
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "contactInquiry" in data
+  ) {
+    return { inquiry: data.contactInquiry };
+  }
+  return { inquiry: data as ContactInquiry };
+}
+
+export async function replyContactInquiry(id: string, adminReply: string) {
+  return apiClient<{ inquiry: ContactInquiry }>(
+    `/admin/contact-inquiries/${id}/reply`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ adminReply }),
+    }
+  );
+}
+
+export async function updateContactInquiryStatus(
+  id: string,
+  payload: UpdateContactInquiryStatusPayload
+) {
+  return apiClient<{ inquiry: ContactInquiry }>(
+    `/admin/contact-inquiries/${id}/status`,
     {
       method: "PATCH",
       body: JSON.stringify(payload),

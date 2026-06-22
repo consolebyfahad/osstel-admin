@@ -38,6 +38,7 @@ export interface DashboardStats {
   blockedOwners: number;
   totalHostels: number;
   pendingPlanRequests: number;
+  newContactInquiries?: number;
   standardOwners: number;
   premiumOwners: number;
 }
@@ -206,6 +207,38 @@ export interface SupportRequestsListParams {
 export interface UpdateSupportStatusPayload {
   adminReply?: string;
   status: SupportRequestStatus;
+}
+
+export type ContactInquiryStatus =
+  | "new"
+  | "in_progress"
+  | "replied"
+  | "closed";
+
+export interface ContactInquiry {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  message: string;
+  source: "website";
+  status: ContactInquiryStatus;
+  adminReply?: string | null;
+  repliedAt?: string | null;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface ContactInquiriesListParams {
+  page?: number;
+  limit?: number;
+  status?: ContactInquiryStatus | "all";
+  search?: string;
+}
+
+export interface UpdateContactInquiryStatusPayload {
+  adminReply?: string;
+  status: ContactInquiryStatus;
 }
 
 export interface AdminProfileFormData {

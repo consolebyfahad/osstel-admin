@@ -4,6 +4,7 @@ import {
   Building2,
   Clock,
   Crown,
+  Mail,
   ShieldBan,
   Users,
 } from "lucide-react";
@@ -73,6 +74,12 @@ export function DashboardPageContent() {
             value={stats.pendingPlanRequests}
             icon={Clock}
             description="Awaiting admin approval"
+          />
+          <StatCard
+            title="New Website Inquiries"
+            value={stats.newContactInquiries ?? 0}
+            icon={Mail}
+            description="Unread contact form messages"
           />
           <StatCard
             title="Standard Owners"

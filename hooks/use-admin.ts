@@ -8,6 +8,8 @@ import {
 import {
   approvePlanRequest,
   blockOwner,
+  getContactInquiry,
+  getContactInquiries,
   getHostel,
   getHostels,
   getOwner,
@@ -18,13 +20,17 @@ import {
   getSupportRequests,
   login as apiLogin,
   rejectPlanRequest,
+  replyContactInquiry,
   replySupportRequest,
+  updateContactInquiryStatus,
   updateOwnerPlan,
   updateSupportRequestStatus,
 } from "@/lib/api/admin";
 import { showApiError, showApiSuccess } from "@/lib/api/client";
 import { useAuthStore } from "@/lib/store/auth-store";
 import type {
+  ContactInquiriesListParams,
+  ContactInquiryStatus,
   HostelsListParams,
   OwnersListParams,
   PlanRequestsListParams,
@@ -212,6 +218,64 @@ export function useUpdateSupportStatus() {
       queryClient.invalidateQueries({
         queryKey: ["support-request", variables.id],
       });
+    },
+    onError: showApiError,
+  });
+}
+
+export function useContactInquiries(params: ContactInquiriesListParams) {
+  return useQuery({
+    queryKey: ["contact-inquiries", params],
+    queryFn: () => getContactInquiries(params),
+  });
+}
+
+export function useContactInquiry(id: string) {
+  return useQuery({
+    queryKey: ["contact-inquiry", id],
+    queryFn: () => getContactInquiry(id),
+    enabled: !!id,
+  });
+}
+
+export function useReplyContactInquiry() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, adminReply }: { id: string; adminReply: string }) =>
+      replyContactInquiry(id, adminReply),
+    onSuccess: (_, variables) => {
+      showApiSuccess("Reply saved successfully");
+      queryClient.invalidateQueries({ queryKey: ["contact-inquiries"] });
+      queryClient.invalidateQueries({
+        queryKey: ["contact-inquiry", variables.id],
+      });
+      queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+    },
+    onError: showApiError,
+  });
+}
+
+export function useUpdateContactInquiryStatus() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      adminReply,
+      status,
+    }: {
+      id: string;
+      adminReply?: string;
+      status: ContactInquiryStatus;
+    }) => updateContactInquiryStatus(id, { adminReply, status }),
+    onSuccess: (_, variables) => {
+      showApiSuccess("Contact inquiry updated");
+      queryClient.invalidateQueries({ queryKey: ["contact-inquiries"] });
+      queryClient.invalidateQueries({
+        queryKey: ["contact-inquiry", variables.id],
+      });
+      queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
     },
     onError: showApiError,
   });

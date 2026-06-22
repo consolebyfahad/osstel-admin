@@ -7,11 +7,12 @@ import {
   HeadphonesIcon,
   LayoutDashboard,
   LogOut,
+  Mail,
   User,
   Users,
   Building2,
 } from "lucide-react";
-import { useDashboardStats, useSupportRequests } from "@/hooks/use-admin";
+import { useContactInquiries, useDashboardStats, useSupportRequests } from "@/hooks/use-admin";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { AdminAvatar } from "@/components/AdminAvatar";
 import { Logo } from "@/components/Logo";
@@ -26,6 +27,12 @@ const navItems = [
     label: "Plan Requests",
     icon: ClipboardList,
     badgeKey: "pendingPlanRequests" as const,
+  },
+  {
+    href: "/contact-inquiries",
+    label: "Website Inquiries",
+    icon: Mail,
+    badgeKey: "newContactInquiries" as const,
   },
   {
     href: "/support-requests",
