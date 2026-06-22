@@ -90,8 +90,29 @@ export async function getHostels(params: HostelsListParams = {}) {
   );
 }
 
+type HostelDetailResponse = HostelDetail & {
+  stats?: {
+    totalRooms: number;
+    totalTenants: number;
+    totalCapacity: number;
+  };
+};
+
 export async function getHostel(id: string) {
-  return apiClient<{ hostel: HostelDetail }>(`/admin/hostels/${id}`);
+  const data = await apiClient<{ hostel: HostelDetailResponse }>(
+    `/admin/hostels/${id}`
+  );
+
+  const { stats, ...hostel } = data.hostel;
+
+  return {
+    hostel: {
+      ...hostel,
+      totalRooms: hostel.totalRooms ?? stats?.totalRooms ?? 0,
+      totalTenants: hostel.totalTenants ?? stats?.totalTenants ?? 0,
+      totalCapacity: hostel.totalCapacity ?? stats?.totalCapacity ?? 0,
+    },
+  };
 }
 
 export async function getPlanRequests(params: PlanRequestsListParams = {}) {
@@ -136,32 +157,9 @@ export async function getSupportRequests(params: SupportRequestsListParams = {})
   if (params.search) searchParams.set("search", params.search);
 
   const query = searchParams.toString();
-  const data = await apiClient<
-    | { requests: SupportRequest[]; pagination: Pagination }
-    | { supportRequests: SupportRequest[]; pagination: Pagination }
-    | { support: SupportRequest[]; pagination?: Pagination }
-  >(`/support${query ? `?${query}` : ""}`);
-
-  const requests =
-    "requests" in data && data.requests
-      ? data.requests
-      : "supportRequests" in data && data.supportRequests
-        ? data.supportRequests
-        : "support" in data && Array.isArray(data.support)
-          ? data.support
-          : [];
-
-  const pagination =
-    "pagination" in data && data.pagination
-      ? data.pagination
-      : {
-          total: requests.length,
-          page: params.page ?? 1,
-          limit: params.limit ?? 20,
-          pages: 1,
-        };
-
-  return { requests, pagination };
+  return apiClient<{ requests: SupportRequest[]; pagination: Pagination }>(
+    `/admin/support-requests${query ? `?${query}` : ""}`
+  );
 }
 
 export async function getSupportRequest(id: string) {
@@ -169,7 +167,7 @@ export async function getSupportRequest(id: string) {
     | { request: SupportRequest }
     | { supportRequest: SupportRequest }
     | SupportRequest
-  >(`/support-requests/${id}`);
+  >(`/admin/support-requests/${id}`);
 
   if (typeof data === "object" && data !== null && "request" in data) {
     return { request: data.request };
@@ -182,7 +180,7 @@ export async function getSupportRequest(id: string) {
 
 export async function replySupportRequest(id: string, adminReply: string) {
   return apiClient<{ request: SupportRequest }>(
-    `/support-requests/${id}/reply`,
+    `/admin/support-requests/${id}/reply`,
     {
       method: "PATCH",
       body: JSON.stringify({ adminReply }),
@@ -195,7 +193,7 @@ export async function updateSupportRequestStatus(
   payload: UpdateSupportStatusPayload
 ) {
   return apiClient<{ request: SupportRequest }>(
-    `/support-requests/${id}/status`,
+    `/admin/support-requests/${id}/status`,
     {
       method: "PATCH",
       body: JSON.stringify(payload),

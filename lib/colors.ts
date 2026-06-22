@@ -59,6 +59,6 @@ export const COLORS = {
   },
 } as const;
 
-/** CSS variables in app/globals.css mirror these tokens. */
+/** CSS variables in styles/globals.css mirror these tokens. */
 export type ThemeMode = keyof typeof COLORS;
 export type AppColors = (typeof COLORS)[ThemeMode];

@@ -27,7 +27,6 @@ import {
 
 const statusOptions: SupportRequestStatus[] = [
   "open",
-  "pending",
   "in_progress",
   "resolved",
   "closed",

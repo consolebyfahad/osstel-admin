@@ -1,6 +1,6 @@
 "use client";
 
-import loaderAnimation from "@/public/animations/Loader.json";
+import loaderAnimation from "@/assets/animations/Loader.json";
 import { LottiePlayer } from "@/components/LottiePlayer";
 import { cn } from "@/lib/utils";
 

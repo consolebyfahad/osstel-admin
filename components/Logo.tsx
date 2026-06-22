@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import osstelLogo from "@/app/applogo.png";
 
 interface LogoProps {
   variant?: "icon" | "full";
@@ -21,7 +20,7 @@ export function Logo({ variant = "full", size = "md", className }: LogoProps) {
     const iconSize = sizes[size].icon;
     return (
       <Image
-        src="/applogo.png"
+        src="/images/applogo.png"
         alt="OSSTEL"
         width={iconSize}
         height={iconSize}
@@ -34,7 +33,7 @@ export function Logo({ variant = "full", size = "md", className }: LogoProps) {
   const { width, height } = sizes[size].full;
   return (
     <Image
-      src={osstelLogo}
+      src="/images/applogo.png"
       alt="OSSTEL Admin"
       width={width}
       height={height}

@@ -1,6 +1,6 @@
 "use client";
 
-import failedAnimation from "@/public/animations/Failed.json";
+import failedAnimation from "@/assets/animations/Failed.json";
 import { LottiePlayer } from "@/components/LottiePlayer";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
