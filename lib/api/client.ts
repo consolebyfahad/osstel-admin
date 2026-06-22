@@ -3,7 +3,7 @@ import { useAuthStore } from "@/lib/store/auth-store";
 import type { ApiResponse } from "@/lib/types";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5001/api/v1";
+  process.env.NEXT_PUBLIC_API_URL ;
 
 export class ApiError extends Error {
   errors?: string[];
