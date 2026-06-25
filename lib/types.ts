@@ -13,8 +13,8 @@ export interface SubscriptionPeriodInfo {
   active: boolean;
   plan: SubscriptionPlan;
   startedAt: string | null;
-  expiresAt: string;
-  daysRemaining: number;
+  expiresAt: string | null;
+  daysRemaining: number | null;
   canRenew: boolean;
 }
 
@@ -132,7 +132,7 @@ export interface HostelListItem {
   roomsCount: number;
   tenantsCount: number;
   status: HostelStatus;
-  owner: HostelOwnerInfo;
+  owner: HostelOwnerInfo | null;
 }
 
 export interface Room {

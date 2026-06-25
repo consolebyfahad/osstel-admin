@@ -61,9 +61,21 @@ export async function getOwners(params: OwnersListParams = {}) {
   if (params.search) searchParams.set("search", params.search);
 
   const query = searchParams.toString();
-  return apiClient<{ owners: OwnerListItem[]; pagination: Pagination }>(
-    `/admin/owners${query ? `?${query}` : ""}`
-  );
+  const data = await apiClient<
+    | { owners: OwnerListItem[]; pagination: Pagination }
+    | { data: { owners: OwnerListItem[]; pagination: Pagination } }
+  >(`/admin/owners${query ? `?${query}` : ""}`);
+
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "data" in data &&
+    data.data?.owners
+  ) {
+    return data.data;
+  }
+
+  return data as { owners: OwnerListItem[]; pagination: Pagination };
 }
 
 export async function getOwner(id: string) {
@@ -113,9 +125,21 @@ export async function getHostels(params: HostelsListParams = {}) {
   if (params.search) searchParams.set("search", params.search);
 
   const query = searchParams.toString();
-  return apiClient<{ hostels: HostelListItem[]; pagination: Pagination }>(
-    `/admin/hostels${query ? `?${query}` : ""}`
-  );
+  const data = await apiClient<
+    | { hostels: HostelListItem[]; pagination: Pagination }
+    | { data: { hostels: HostelListItem[]; pagination: Pagination } }
+  >(`/admin/hostels${query ? `?${query}` : ""}`);
+
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "data" in data &&
+    data.data?.hostels
+  ) {
+    return data.data;
+  }
+
+  return data as { hostels: HostelListItem[]; pagination: Pagination };
 }
 
 type HostelDetailResponse = HostelDetail & {

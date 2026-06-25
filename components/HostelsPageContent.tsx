@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Eye, Search } from "lucide-react";
 import { useHostels } from "@/hooks/use-admin";
 import { Navbar } from "@/components/Navbar";
+import { PageError } from "@/components/PageError";
 import { PageLoader } from "@/components/PageLoader";
 import { Pagination } from "@/components/Pagination";
 import { PlanBadge } from "@/components/PlanBadge";
@@ -26,7 +27,7 @@ export function HostelsPageContent() {
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
 
-  const { data, isLoading } = useHostels({
+  const { data, isLoading, isError, refetch } = useHostels({
     page,
     limit: 20,
     search: search || undefined,
@@ -64,6 +65,12 @@ export function HostelsPageContent() {
 
         {isLoading ? (
           <PageLoader />
+        ) : isError ? (
+          <PageError
+            title="Failed to load hostels"
+            message="We couldn't fetch the hostels list. Check your connection and try again."
+            onRetry={() => refetch()}
+          />
         ) : (
           <>
             <Table>
@@ -94,21 +101,35 @@ export function HostelsPageContent() {
                         <p className="text-xs text-gray-400">{hostel.address}</p>
                       </TableCell>
                       <TableCell>
-                        <Link
-                          href={`/owners/${hostel.owner.id}`}
-                          className="text-blue-600 hover:underline"
-                        >
-                          {hostel.owner.name}
-                        </Link>
-                        <p className="text-xs text-gray-400">
-                          {hostel.owner.phone}
-                        </p>
+                        {hostel.owner ? (
+                          <>
+                            <Link
+                              href={`/owners/${hostel.owner.id}`}
+                              className="text-blue-600 hover:underline"
+                            >
+                              {hostel.owner.name}
+                            </Link>
+                            <p className="text-xs text-gray-400">
+                              {hostel.owner.phone || "—"}
+                            </p>
+                          </>
+                        ) : (
+                          <span className="text-sm text-gray-400">Unknown owner</span>
+                        )}
                       </TableCell>
                       <TableCell>
-                        <PlanBadge plan={hostel.owner.subscriptionPlan} />
+                        {hostel.owner ? (
+                          <PlanBadge plan={hostel.owner.subscriptionPlan} />
+                        ) : (
+                          "—"
+                        )}
                       </TableCell>
                       <TableCell>
-                        <StatusBadge status={hostel.owner.status} />
+                        {hostel.owner ? (
+                          <StatusBadge status={hostel.owner.status} />
+                        ) : (
+                          "—"
+                        )}
                       </TableCell>
                       <TableCell>{hostel.roomsCount}</TableCell>
                       <TableCell>{hostel.tenantsCount}</TableCell>

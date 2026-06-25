@@ -9,6 +9,7 @@ import {
 } from "@/hooks/use-admin";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Navbar } from "@/components/Navbar";
+import { PageError } from "@/components/PageError";
 import { PageLoader } from "@/components/PageLoader";
 import { Pagination } from "@/components/Pagination";
 import { PlanBadge } from "@/components/PlanBadge";
@@ -43,7 +44,7 @@ export function OwnersPageContent() {
   const [planFilter, setPlanFilter] = useState<string>("all");
   const [blockTarget, setBlockTarget] = useState<OwnerListItem | null>(null);
 
-  const { data, isLoading } = useOwners({
+  const { data, isLoading, isError, refetch } = useOwners({
     page,
     limit: 20,
     status: statusFilter === "all" ? undefined : statusFilter as "active" | "blocked",
@@ -125,6 +126,12 @@ export function OwnersPageContent() {
 
         {isLoading ? (
           <PageLoader />
+        ) : isError ? (
+          <PageError
+            title="Failed to load owners"
+            message="We couldn't fetch the owners list. Check your connection and try again."
+            onRetry={() => refetch()}
+          />
         ) : (
           <>
             <Table>

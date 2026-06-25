@@ -200,11 +200,13 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                       </p>
                       <div className="flex items-center gap-2">
                         <PlanBadge plan={activeSubscription.plan} />
-                        <span className="text-xs text-muted-foreground">
-                          {activeSubscription.daysRemaining} day
-                          {activeSubscription.daysRemaining === 1 ? "" : "s"}{" "}
-                          left
-                        </span>
+                        {activeSubscription.daysRemaining != null && (
+                          <span className="text-xs text-muted-foreground">
+                            {activeSubscription.daysRemaining} day
+                            {activeSubscription.daysRemaining === 1 ? "" : "s"}{" "}
+                            left
+                          </span>
+                        )}
                       </div>
                     </div>
                     <div>
@@ -218,7 +220,9 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                     <div>
                       <p className="text-xs text-muted-foreground">Expires</p>
                       <p className="font-medium">
-                        {formatDate(activeSubscription.expiresAt)}
+                        {activeSubscription.expiresAt
+                          ? formatDate(activeSubscription.expiresAt)
+                          : "—"}
                       </p>
                     </div>
                   </>
@@ -288,9 +292,15 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                   </p>
                   <div className="rounded-lg border border-primary-200 bg-primary-100/40 p-3 space-y-2">
                     <p className="text-sm font-medium text-foreground">
-                      {activeSubscription.daysRemaining} day
-                      {activeSubscription.daysRemaining === 1 ? "" : "s"}{" "}
-                      remaining — expires {formatDate(activeSubscription.expiresAt)}
+                      {activeSubscription.daysRemaining != null
+                        ? `${activeSubscription.daysRemaining} day${
+                            activeSubscription.daysRemaining === 1 ? "" : "s"
+                          } remaining${
+                            activeSubscription.expiresAt
+                              ? ` — expires ${formatDate(activeSubscription.expiresAt)}`
+                              : ""
+                          }`
+                        : "Paid subscription active"}
                     </p>
                     {activeSubscription.canRenew && (
                       <p className="text-xs text-warning">
