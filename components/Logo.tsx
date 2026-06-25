@@ -20,7 +20,7 @@ export function Logo({ variant = "full", size = "md", className }: LogoProps) {
     const iconSize = sizes[size].icon;
     return (
       <Image
-        src="/images/applogo.png"
+        src="/osstel.png"
         alt="OSSTEL"
         width={iconSize}
         height={iconSize}
@@ -29,11 +29,11 @@ export function Logo({ variant = "full", size = "md", className }: LogoProps) {
       />
     );
   }
-
+  
   const { width, height } = sizes[size].full;
   return (
     <Image
-      src="/images/applogo.png"
+      src="/osstel.png"
       alt="OSSTEL Admin"
       width={width}
       height={height}

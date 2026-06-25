@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, AlertCircle } from "lucide-react";
+import { ArrowLeft, AlertCircle, Clock } from "lucide-react";
 import {
   useBlockOwner,
+  useCancelOwnerTrial,
+  useGrantOwnerTrial,
   useOwner,
   useUpdateOwnerPlan,
 } from "@/hooks/use-admin";
@@ -42,6 +44,8 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
   const { data, isLoading } = useOwner(id);
   const blockMutation = useBlockOwner();
   const planMutation = useUpdateOwnerPlan();
+  const trialMutation = useGrantOwnerTrial();
+  const cancelTrialMutation = useCancelOwnerTrial();
   const [showBlockDialog, setShowBlockDialog] = useState(false);
 
   const owner = data?.owner;
@@ -59,6 +63,18 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
     if (!owner) return;
     await planMutation.mutateAsync({ id: owner.id, plan });
   };
+
+  const handleGrantTrial = async (days: 10 | 20 | 30) => {
+    if (!owner) return;
+    await trialMutation.mutateAsync({ id: owner.id, days });
+  };
+
+  const handleCancelTrial = async () => {
+    if (!owner) return;
+    await cancelTrialMutation.mutateAsync(owner.id);
+  };
+
+  const isTrialActive = Boolean(owner?.trial?.active);
 
   if (isLoading) {
     return (
@@ -134,9 +150,21 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                   <StatusBadge status={owner.status} />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Plan</p>
+                  <p className="text-xs text-gray-500">Base Plan</p>
                   <PlanBadge plan={owner.subscriptionPlan} />
                 </div>
+                {isTrialActive && owner.trial && (
+                  <div>
+                    <p className="text-xs text-gray-500">Active Trial</p>
+                    <div className="flex items-center gap-2">
+                      <PlanBadge plan={owner.trial.plan} />
+                      <span className="text-xs text-muted-foreground">
+                        {owner.trial.daysRemaining} day
+                        {owner.trial.daysRemaining === 1 ? "" : "s"} left
+                      </span>
+                    </div>
+                  </div>
+                )}
                 <div>
                   <p className="text-xs text-gray-500">Joined</p>
                   <p className="font-medium">{formatDate(owner.createdAt)}</p>
@@ -179,9 +207,59 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                   <SelectContent>
                     <SelectItem value="free">Free</SelectItem>
                     <SelectItem value="standard">Standard</SelectItem>
-                    <SelectItem value="premium">Premium</SelectItem>
+                    <SelectItem value="premium">Premium (Pro)</SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-3 border-t border-border/50 pt-4">
+                <div className="flex items-center gap-2">
+                  <Clock className="h-4 w-4 text-primary" />
+                  <p className="text-sm font-medium text-gray-700">
+                    Pro Trial
+                  </p>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Grant temporary Pro access. After the trial ends, the owner
+                  returns to their base plan ({owner.subscriptionPlan}).
+                </p>
+                {isTrialActive && owner.trial ? (
+                  <div className="space-y-2 rounded-lg border border-primary-200 bg-primary-100/40 p-3">
+                    <p className="text-sm font-medium text-foreground">
+                      Trial active — ends{" "}
+                      {formatDate(owner.trial.endsAt)}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {owner.trial.daysRemaining} day
+                      {owner.trial.daysRemaining === 1 ? "" : "s"} remaining
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={handleCancelTrial}
+                      disabled={cancelTrialMutation.isPending}
+                    >
+                      {cancelTrialMutation.isPending
+                        ? "Cancelling..."
+                        : "End trial now"}
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-2">
+                    {([10, 20, 30] as const).map((days) => (
+                      <Button
+                        key={days}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleGrantTrial(days)}
+                        disabled={trialMutation.isPending}
+                      >
+                        {days} days
+                      </Button>
+                    ))}
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

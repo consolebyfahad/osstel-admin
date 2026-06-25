@@ -14,8 +14,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OSSTEL Admin | Hostel Management",
+  title: "Osstel Admin | Hostel Management",
   description: "Admin dashboard for managing hostel owners and properties",
+  icons: {
+    icon: "/osstel.png",
+    apple: "/osstel.png",
+  },
 };
 
 export default function RootLayout({

@@ -2,8 +2,14 @@ import { toast } from "sonner";
 import { useAuthStore } from "@/lib/store/auth-store";
 import type { ApiResponse } from "@/lib/types";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ;
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+const AUTH_PATHS_WITHOUT_REFRESH = new Set([
+  "/auth/login",
+  "/auth/register",
+  "/auth/refresh",
+  "/auth/logout",
+]);
 
 export class ApiError extends Error {
   errors?: string[];
@@ -22,9 +28,64 @@ function handleUnauthorized() {
   }
 }
 
+function shouldAttemptRefresh(path: string) {
+  return !AUTH_PATHS_WITHOUT_REFRESH.has(path);
+}
+
+let refreshPromise: Promise<string | null> | null = null;
+
+async function refreshAccessToken(): Promise<string | null> {
+  if (refreshPromise) {
+    return refreshPromise;
+  }
+
+  refreshPromise = (async () => {
+    const { refreshToken, user, updateTokens } = useAuthStore.getState();
+
+    if (!refreshToken || !user) {
+      return null;
+    }
+
+    const response = await fetch(`${BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    let json: ApiResponse<{
+      accessToken?: string;
+      refreshToken?: string;
+      token?: string;
+    }>;
+
+    try {
+      json = await response.json();
+    } catch {
+      return null;
+    }
+
+    if (!response.ok || !json.success || !json.data) {
+      return null;
+    }
+
+    const accessToken = json.data.accessToken ?? json.data.token ?? null;
+    if (!accessToken) {
+      return null;
+    }
+
+    updateTokens(accessToken, json.data.refreshToken ?? refreshToken);
+    return accessToken;
+  })().finally(() => {
+    refreshPromise = null;
+  });
+
+  return refreshPromise;
+}
+
 export async function apiClient<T>(
   path: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  hasRetried = false,
 ): Promise<T> {
   const { accessToken } = useAuthStore.getState();
 
@@ -50,6 +111,13 @@ export async function apiClient<T>(
   }
 
   if (response.status === 401) {
+    if (!hasRetried && shouldAttemptRefresh(path)) {
+      const newToken = await refreshAccessToken();
+      if (newToken) {
+        return apiClient<T>(path, options, true);
+      }
+    }
+
     handleUnauthorized();
     throw new ApiError(json.message || "Unauthorized");
   }

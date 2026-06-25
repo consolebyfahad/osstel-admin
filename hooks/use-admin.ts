@@ -8,12 +8,14 @@ import {
 import {
   approvePlanRequest,
   blockOwner,
+  cancelOwnerTrial,
   getContactInquiry,
   getContactInquiries,
   getHostel,
   getHostels,
   getOwner,
   getOwners,
+  grantOwnerTrial,
   getPlanRequests,
   getStats,
   getSupportRequest,
@@ -90,6 +92,35 @@ export function useUpdateOwnerPlan() {
       queryClient.invalidateQueries({ queryKey: ["owners"] });
       queryClient.invalidateQueries({ queryKey: ["owner", variables.id] });
       queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+    },
+    onError: showApiError,
+  });
+}
+
+export function useGrantOwnerTrial() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ id, days }: { id: string; days: 10 | 20 | 30 }) =>
+      grantOwnerTrial(id, days),
+    onSuccess: (_, variables) => {
+      showApiSuccess(`Pro trial granted for ${variables.days} days`);
+      queryClient.invalidateQueries({ queryKey: ["owners"] });
+      queryClient.invalidateQueries({ queryKey: ["owner", variables.id] });
+    },
+    onError: showApiError,
+  });
+}
+
+export function useCancelOwnerTrial() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => cancelOwnerTrial(id),
+    onSuccess: (_, id) => {
+      showApiSuccess("Trial cancelled");
+      queryClient.invalidateQueries({ queryKey: ["owners"] });
+      queryClient.invalidateQueries({ queryKey: ["owner", id] });
     },
     onError: showApiError,
   });

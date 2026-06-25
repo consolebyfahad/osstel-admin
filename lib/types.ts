@@ -1,6 +1,14 @@
 export type OwnerStatus = "active" | "blocked";
 export type HostelStatus = "active" | "vacant";
 export type SubscriptionPlan = "free" | "standard" | "premium";
+
+export interface TrialInfo {
+  active: boolean;
+  plan: SubscriptionPlan;
+  endsAt: string;
+  daysRemaining: number;
+}
+
 export type PlanRequestStatus = "pending" | "approved" | "rejected";
 export type RoomStatus = "occupied" | "vacant" | "active";
 
@@ -80,6 +88,8 @@ export interface OwnerDetail {
   phone: string;
   status: OwnerStatus;
   subscriptionPlan: SubscriptionPlan;
+  effectivePlan?: SubscriptionPlan;
+  trial?: TrialInfo | null;
   hostelsCount: number;
   hostels: OwnerHostelSummary[];
   createdAt: string;
@@ -184,6 +194,7 @@ export interface SupportRequestUser {
   id: string;
   name: string;
   phone: string;
+  role: string;
 }
 
 export interface SupportRequest {

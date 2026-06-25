@@ -84,6 +84,19 @@ export async function updateOwnerPlan(id: string, plan: SubscriptionPlan) {
   });
 }
 
+export async function grantOwnerTrial(id: string, days: 10 | 20 | 30) {
+  return apiClient<{ owner: OwnerDetail }>(`/admin/owners/${id}/trial`, {
+    method: "POST",
+    body: JSON.stringify({ days }),
+  });
+}
+
+export async function cancelOwnerTrial(id: string) {
+  return apiClient<{ owner: OwnerDetail }>(`/admin/owners/${id}/trial`, {
+    method: "DELETE",
+  });
+}
+
 export async function getHostels(params: HostelsListParams = {}) {
   const searchParams = new URLSearchParams();
   if (params.page) searchParams.set("page", String(params.page));

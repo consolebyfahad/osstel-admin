@@ -118,12 +118,16 @@ export function SupportRequestDetailPageContent({
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <p className="text-xs text-muted-foreground">From</p>
-                  <Link
-                    href={`/owners/${user.id}`}
-                    className="font-medium text-primary hover:underline"
-                  >
-                    {user.name}
-                  </Link>
+                  {user.role === "manager" ? (
+                    <Link
+                      href={`/owners/${user.id}`}
+                      className="font-medium text-primary hover:underline"
+                    >
+                      {user.name}
+                    </Link>
+                  ) : (
+                    <p className="font-medium">{user.name}</p>
+                  )}
                   <p className="text-sm text-muted-foreground">{user.phone}</p>
                 </div>
                 <div>
