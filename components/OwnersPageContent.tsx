@@ -32,6 +32,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { OwnerListItem } from "@/lib/types";
+import { getOwnerContact } from "@/lib/utils";
+import { TrialBadge } from "@/components/TrialBadge";
 
 export function OwnersPageContent() {
   const [page, setPage] = useState(1);
@@ -78,7 +80,7 @@ export function OwnersPageContent() {
           <div className="relative flex-1 sm:max-w-xs">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
-              placeholder="Search by name or phone..."
+              placeholder="Search by name, phone, or email..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -129,7 +131,7 @@ export function OwnersPageContent() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Phone</TableHead>
+                  <TableHead>Contact</TableHead>
                   <TableHead>Plan</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Hostels</TableHead>
@@ -143,11 +145,36 @@ export function OwnersPageContent() {
                   owners.map((owner) => (
                     <TableRow key={owner.id}>
                       <TableCell>
-                        <p className="font-medium text-gray-900">{owner.name}</p>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="font-medium text-gray-900">{owner.name}</p>
+                          {owner.trial?.active && (
+                            <TrialBadge
+                              daysRemaining={owner.trial.daysRemaining}
+                              compact
+                            />
+                          )}
+                        </div>
                       </TableCell>
-                      <TableCell>{owner.phone}</TableCell>
                       <TableCell>
-                        <PlanBadge plan={owner.subscriptionPlan} />
+                        <span
+                          className="text-sm text-gray-700"
+                          title={
+                            owner.contactType === "email"
+                              ? "Google sign-in"
+                              : undefined
+                          }
+                        >
+                          {getOwnerContact(owner)}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        <PlanBadge
+                          plan={
+                            owner.trial?.active && owner.effectivePlan
+                              ? owner.effectivePlan
+                              : owner.subscriptionPlan
+                          }
+                        />
                       </TableCell>
                       <TableCell>
                         <StatusBadge status={owner.status} />

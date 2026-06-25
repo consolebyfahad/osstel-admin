@@ -9,6 +9,15 @@ export interface TrialInfo {
   daysRemaining: number;
 }
 
+export interface SubscriptionPeriodInfo {
+  active: boolean;
+  plan: SubscriptionPlan;
+  startedAt: string | null;
+  expiresAt: string;
+  daysRemaining: number;
+  canRenew: boolean;
+}
+
 export type PlanRequestStatus = "pending" | "approved" | "rejected";
 export type RoomStatus = "occupied" | "vacant" | "active";
 
@@ -66,8 +75,14 @@ export interface OwnerListItem {
   id: string;
   name: string;
   phone: string;
+  email?: string | null;
+  authProvider?: "local" | "google";
+  contact?: string;
+  contactType?: "phone" | "email" | null;
   status: OwnerStatus;
   subscriptionPlan: SubscriptionPlan;
+  effectivePlan?: SubscriptionPlan;
+  trial?: TrialInfo | null;
   hostelsCount: number;
   hostels: OwnerHostelSummary[];
   createdAt: string;
@@ -86,10 +101,15 @@ export interface OwnerDetail {
   id: string;
   name: string;
   phone: string;
+  email?: string | null;
+  authProvider?: "local" | "google";
+  contact?: string;
+  contactType?: "phone" | "email" | null;
   status: OwnerStatus;
   subscriptionPlan: SubscriptionPlan;
   effectivePlan?: SubscriptionPlan;
   trial?: TrialInfo | null;
+  subscription?: SubscriptionPeriodInfo | null;
   hostelsCount: number;
   hostels: OwnerHostelSummary[];
   createdAt: string;

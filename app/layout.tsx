@@ -17,8 +17,12 @@ export const metadata: Metadata = {
   title: "Osstel Admin | Hostel Management",
   description: "Admin dashboard for managing hostel owners and properties",
   icons: {
-    icon: "/osstel.png",
-    apple: "/osstel.png",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/osstel.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+    shortcut: "/favicon.ico",
   },
 };
 

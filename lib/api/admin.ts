@@ -97,6 +97,15 @@ export async function cancelOwnerTrial(id: string) {
   });
 }
 
+export async function extendOwnerSubscription(id: string) {
+  return apiClient<{ owner: OwnerDetail }>(
+    `/admin/owners/${id}/extend-subscription`,
+    {
+      method: "POST",
+    }
+  );
+}
+
 export async function getHostels(params: HostelsListParams = {}) {
   const searchParams = new URLSearchParams();
   if (params.page) searchParams.set("page", String(params.page));

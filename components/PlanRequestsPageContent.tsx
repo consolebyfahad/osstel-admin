@@ -209,7 +209,7 @@ export function PlanRequestsPageContent() {
         open={!!approveTarget}
         onOpenChange={(open) => !open && setApproveTarget(null)}
         title="Approve Plan Request"
-        description={`Approve upgrade to ${approveTarget?.requestedPlan} for ${approveTarget?.owner.name}? This will automatically upgrade their plan.`}
+        description={`Approve upgrade to ${approveTarget?.requestedPlan} for ${approveTarget?.owner.name}? This activates their plan for 30 days. After that, it returns to Free unless renewed or extended.`}
         confirmLabel="Approve"
         onConfirm={handleApprove}
         isLoading={approveMutation.isPending}

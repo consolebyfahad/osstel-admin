@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
+  ChevronLeft,
+  ChevronRight,
   ClipboardList,
   HeadphonesIcon,
   LayoutDashboard,
@@ -16,6 +18,7 @@ import { useDashboardStats } from "@/hooks/use-admin";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { AdminAvatar } from "@/components/AdminAvatar";
 import { Logo } from "@/components/Logo";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navItems = [
@@ -45,10 +48,17 @@ const navItems = [
 
 interface SidebarProps {
   mobileOpen?: boolean;
+  collapsed?: boolean;
+  onToggleCollapse?: () => void;
   onNavigate?: () => void;
 }
 
-export function Sidebar({ mobileOpen = false, onNavigate }: SidebarProps) {
+export function Sidebar({
+  mobileOpen = false,
+  collapsed = false,
+  onToggleCollapse,
+  onNavigate,
+}: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, avatarUrl, logout } = useAuth();
@@ -64,19 +74,46 @@ export function Sidebar({ mobileOpen = false, onNavigate }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "glass-sidebar fixed inset-y-0 left-0 z-30 flex w-64 flex-col text-sidebar-foreground transition-transform duration-300 lg:translate-x-0",
+        "glass-sidebar fixed inset-y-0 left-0 z-30 flex flex-col text-sidebar-foreground transition-all duration-300 lg:translate-x-0",
+        collapsed ? "w-[72px]" : "w-64",
         mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}
     >
-      <div className="flex h-16 items-center gap-3 border-b border-border/50 px-6">
+      <div
+        className={cn(
+          "flex border-b border-border/50",
+          collapsed
+            ? "h-auto flex-col items-center gap-1 py-3 px-2"
+            : "h-16 items-center gap-3 px-4"
+        )}
+      >
         <Logo variant="icon" size="sm" />
-        <div className="min-w-0">
-          <p className="text-sm font-bold text-foreground">OSSTEL Admin</p>
-          <p className="text-xs text-muted-foreground">Hostel Management</p>
-        </div>
+        {!collapsed && (
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-foreground">OSSTEL Admin</p>
+            <p className="text-xs text-muted-foreground">Hostel Management</p>
+          </div>
+        )}
+        {onToggleCollapse && (
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="hidden h-8 w-8 shrink-0 lg:inline-flex"
+            onClick={onToggleCollapse}
+            aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {collapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
+          </Button>
+        )}
       </div>
 
-      <nav className="flex-1 space-y-1 p-4">
+      <nav className={cn("flex-1 space-y-1 p-3", collapsed && "px-2")}>
         {navItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -92,8 +129,10 @@ export function Sidebar({ mobileOpen = false, onNavigate }: SidebarProps) {
               key={item.href}
               href={item.href}
               onClick={onNavigate}
+              title={collapsed ? item.label : undefined}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                "relative flex items-center rounded-xl text-sm font-medium transition-all duration-200",
+                collapsed ? "justify-center px-2 py-2.5" : "gap-3 px-3 py-2.5",
                 isActive
                   ? "glass-nav-item-active text-foreground"
                   : "text-muted-foreground rounded-xl hover:bg-primary-100/40 hover:backdrop-blur-sm"
@@ -101,14 +140,20 @@ export function Sidebar({ mobileOpen = false, onNavigate }: SidebarProps) {
             >
               <Icon
                 className={cn(
-                  "h-4 w-4",
+                  "h-4 w-4 shrink-0",
                   isActive ? "text-primary" : "text-muted-foreground"
                 )}
               />
-              <span className="flex-1">{item.label}</span>
+              {!collapsed && <span className="flex-1">{item.label}</span>}
               {badgeCount > 0 && (
-                <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-error px-1.5 text-xs font-medium text-white">
-                  {badgeCount}
+                <span
+                  className={cn(
+                    "flex h-5 min-w-5 items-center justify-center rounded-full bg-error px-1.5 text-xs font-medium text-white",
+                    collapsed &&
+                      "absolute -right-0.5 -top-0.5 h-4 min-w-4 px-1 text-[10px]"
+                  )}
+                >
+                  {badgeCount > 99 ? "99+" : badgeCount}
                 </span>
               )}
             </Link>
@@ -117,29 +162,44 @@ export function Sidebar({ mobileOpen = false, onNavigate }: SidebarProps) {
       </nav>
 
       {user && (
-        <div className="border-t border-border/50 p-4 space-y-3">
+        <div
+          className={cn(
+            "border-t border-border/50 space-y-2",
+            collapsed ? "p-2" : "p-4 space-y-3"
+          )}
+        >
           <Link
             href="/profile"
             onClick={onNavigate}
-            className="glass-bubble flex items-center gap-3 rounded-xl px-3 py-2 transition-all hover:scale-[1.01]"
+            title={collapsed ? user.name : undefined}
+            className={cn(
+              "glass-bubble flex items-center rounded-xl transition-all hover:scale-[1.01]",
+              collapsed ? "justify-center p-2" : "gap-3 px-3 py-2"
+            )}
           >
             <AdminAvatar name={user.name} avatarUrl={avatarUrl} size="sm" />
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium text-foreground">
-                {user.name}
-              </p>
-              <p className="truncate text-xs text-muted-foreground">
-                {user.phone}
-              </p>
-            </div>
+            {!collapsed && (
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-foreground">
+                  {user.name}
+                </p>
+                <p className="truncate text-xs text-muted-foreground">
+                  {user.phone}
+                </p>
+              </div>
+            )}
           </Link>
           <button
             type="button"
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-error/10 hover:text-error"
+            title={collapsed ? "Logout" : undefined}
+            className={cn(
+              "flex w-full items-center rounded-lg text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-error/10 hover:text-error",
+              collapsed ? "justify-center px-2 py-2.5" : "gap-3 px-3 py-2.5"
+            )}
             onClick={handleLogout}
           >
-            <LogOut className="h-4 w-4" />
-            Logout
+            <LogOut className="h-4 w-4 shrink-0" />
+            {!collapsed && "Logout"}
           </button>
         </div>
       )}

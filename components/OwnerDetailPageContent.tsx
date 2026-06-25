@@ -2,20 +2,22 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, AlertCircle, Clock } from "lucide-react";
+import { ArrowLeft, AlertCircle, Calendar, Clock } from "lucide-react";
 import {
   useBlockOwner,
   useCancelOwnerTrial,
+  useExtendOwnerSubscription,
   useGrantOwnerTrial,
   useOwner,
   useUpdateOwnerPlan,
 } from "@/hooks/use-admin";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getOwnerContact } from "@/lib/utils";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Navbar } from "@/components/Navbar";
 import { PageLoader } from "@/components/PageLoader";
 import { PlanBadge } from "@/components/PlanBadge";
 import { StatusBadge } from "@/components/StatusBadge";
+import { TrialBadge } from "@/components/TrialBadge";
 import {
   Table,
   TableBody,
@@ -46,6 +48,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
   const planMutation = useUpdateOwnerPlan();
   const trialMutation = useGrantOwnerTrial();
   const cancelTrialMutation = useCancelOwnerTrial();
+  const extendMutation = useExtendOwnerSubscription();
   const [showBlockDialog, setShowBlockDialog] = useState(false);
 
   const owner = data?.owner;
@@ -74,7 +77,15 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
     await cancelTrialMutation.mutateAsync(owner.id);
   };
 
+  const handleExtendSubscription = async () => {
+    if (!owner) return;
+    await extendMutation.mutateAsync(owner.id);
+  };
+
   const isTrialActive = Boolean(owner?.trial?.active);
+  const activeSubscription = owner?.subscription?.active
+    ? owner.subscription
+    : null;
 
   if (isLoading) {
     return (
@@ -98,7 +109,12 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
 
   return (
     <>
-      <Navbar title={owner.name} description="Owner details and hostels" />
+      <Navbar
+        title={owner.name}
+        description={
+          isTrialActive ? "Owner details · Pro trial active" : "Owner details and hostels"
+        }
+      />
 
       <div className="p-6 space-y-6">
         <Button variant="ghost" size="sm" asChild>
@@ -142,9 +158,19 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                   <p className="font-medium">{owner.name}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Phone</p>
-                  <p className="font-medium">{owner.phone}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {owner.contactType === "email" || owner.authProvider === "google"
+                      ? "Email"
+                      : "Phone"}
+                  </p>
+                  <p className="font-medium">{getOwnerContact(owner)}</p>
                 </div>
+                {owner.email && owner.contactType === "phone" && (
+                  <div>
+                    <p className="text-xs text-muted-foreground">Email</p>
+                    <p className="font-medium">{owner.email}</p>
+                  </div>
+                )}
                 <div>
                   <p className="text-xs text-muted-foreground">Status</p>
                   <StatusBadge status={owner.status} />
@@ -156,7 +182,8 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                 {isTrialActive && owner.trial && (
                   <div>
                     <p className="text-xs text-muted-foreground">Active Trial</p>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <TrialBadge daysRemaining={owner.trial.daysRemaining} />
                       <PlanBadge plan={owner.trial.plan} />
                       <span className="text-xs text-muted-foreground">
                         {owner.trial.daysRemaining} day
@@ -164,6 +191,37 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                       </span>
                     </div>
                   </div>
+                )}
+                {activeSubscription && (
+                  <>
+                    <div>
+                      <p className="text-xs text-muted-foreground">
+                        Paid Subscription
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <PlanBadge plan={activeSubscription.plan} />
+                        <span className="text-xs text-muted-foreground">
+                          {activeSubscription.daysRemaining} day
+                          {activeSubscription.daysRemaining === 1 ? "" : "s"}{" "}
+                          left
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Started</p>
+                      <p className="font-medium">
+                        {activeSubscription.startedAt
+                          ? formatDate(activeSubscription.startedAt)
+                          : "—"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Expires</p>
+                      <p className="font-medium">
+                        {formatDate(activeSubscription.expiresAt)}
+                      </p>
+                    </div>
+                  </>
                 )}
                 <div>
                   <p className="text-xs text-muted-foreground">Joined</p>
@@ -194,6 +252,9 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                 <p className="text-sm font-medium text-foreground">
                   Change Plan Manually
                 </p>
+                <p className="text-xs text-muted-foreground">
+                  Sets plan immediately with a new 30-day subscription period.
+                </p>
                 <Select
                   value={owner.subscriptionPlan}
                   onValueChange={(v) =>
@@ -211,6 +272,45 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                   </SelectContent>
                 </Select>
               </div>
+
+              {activeSubscription && (
+                <div className="space-y-3 border-t border-border/50 pt-4">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-primary" />
+                    <p className="text-sm font-medium text-foreground">
+                      Paid Subscription
+                    </p>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Extends the current period by 30 days from the existing
+                    expiry date. Owner returns to Free if not renewed before
+                    expiry.
+                  </p>
+                  <div className="rounded-lg border border-primary-200 bg-primary-100/40 p-3 space-y-2">
+                    <p className="text-sm font-medium text-foreground">
+                      {activeSubscription.daysRemaining} day
+                      {activeSubscription.daysRemaining === 1 ? "" : "s"}{" "}
+                      remaining — expires {formatDate(activeSubscription.expiresAt)}
+                    </p>
+                    {activeSubscription.canRenew && (
+                      <p className="text-xs text-warning">
+                        Renewal window open — owner can submit a new request.
+                      </p>
+                    )}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={handleExtendSubscription}
+                      disabled={extendMutation.isPending}
+                    >
+                      {extendMutation.isPending
+                        ? "Extending..."
+                        : "Extend 1 month"}
+                    </Button>
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-3 border-t border-border/50 pt-4">
                 <div className="flex items-center gap-2">

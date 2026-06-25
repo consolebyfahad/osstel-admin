@@ -9,6 +9,7 @@ import {
   approvePlanRequest,
   blockOwner,
   cancelOwnerTrial,
+  extendOwnerSubscription,
   getContactInquiry,
   getContactInquiries,
   getHostel,
@@ -119,6 +120,20 @@ export function useCancelOwnerTrial() {
     mutationFn: (id: string) => cancelOwnerTrial(id),
     onSuccess: (_, id) => {
       showApiSuccess("Trial cancelled");
+      queryClient.invalidateQueries({ queryKey: ["owners"] });
+      queryClient.invalidateQueries({ queryKey: ["owner", id] });
+    },
+    onError: showApiError,
+  });
+}
+
+export function useExtendOwnerSubscription() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => extendOwnerSubscription(id),
+    onSuccess: (_, id) => {
+      showApiSuccess("Subscription extended by 1 month");
       queryClient.invalidateQueries({ queryKey: ["owners"] });
       queryClient.invalidateQueries({ queryKey: ["owner", id] });
     },
