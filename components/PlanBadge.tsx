@@ -8,15 +8,18 @@ const planConfig: Record<
 > = {
   free: {
     label: "Free",
-    className: "bg-gray-100 text-gray-700 border-gray-200",
+    className:
+      "bg-muted text-muted-foreground border-border dark:bg-primary-100 dark:text-foreground dark:border-primary-200",
   },
   standard: {
     label: "Standard",
-    className: "bg-blue-100 text-blue-700 border-blue-200",
+    className:
+      "bg-primary-100 text-primary border-primary-200 dark:bg-primary-200 dark:text-primary-foreground dark:border-primary-300",
   },
   premium: {
-    label: "Premium",
-    className: "bg-amber-100 text-amber-800 border-amber-200",
+    label: "Pro",
+    className:
+      "bg-warning/20 text-foreground border-warning/40 dark:bg-warning/15 dark:text-warning dark:border-warning/30",
   },
 };
 

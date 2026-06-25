@@ -10,22 +10,25 @@ const statusConfig: Record<
 > = {
   active: {
     label: "Active",
-    className: "bg-green-100 text-green-700 border-green-200",
+    className:
+      "bg-success/15 text-success border-success/30 dark:bg-success/10 dark:text-success",
   },
   blocked: {
     label: "Blocked",
-    className: "bg-red-100 text-red-700 border-red-200",
+    className:
+      "bg-error/15 text-error border-error/30 dark:bg-error/10 dark:text-error",
   },
   vacant: {
     label: "Vacant",
-    className: "bg-gray-100 text-gray-600 border-gray-200",
+    className:
+      "bg-muted text-muted-foreground border-border dark:bg-primary-100 dark:text-muted-foreground",
   },
 };
 
 export function StatusBadge({ status }: { status: Status }) {
   const config = statusConfig[status] ?? {
     label: status,
-    className: "bg-gray-100 text-gray-700",
+    className: "bg-muted text-muted-foreground border-border",
   };
 
   return (

@@ -109,17 +109,17 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
         </Button>
 
         {owner.pendingPlanRequest && (
-          <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
-            <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 rounded-xl border border-warning/30 bg-warning/10 p-4 dark:bg-warning/5">
+            <AlertCircle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
             <div>
-              <p className="font-medium text-amber-900">Pending Plan Request</p>
-              <p className="text-sm text-amber-700 mt-1">
+              <p className="font-medium text-foreground">Pending Plan Request</p>
+              <p className="text-sm text-muted-foreground mt-1">
                 Requesting upgrade from{" "}
                 <PlanBadge plan={owner.pendingPlanRequest.currentPlan} /> to{" "}
                 <PlanBadge plan={owner.pendingPlanRequest.requestedPlan} />
               </p>
               {owner.pendingPlanRequest.note && (
-                <p className="text-sm text-amber-600 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   Note: {owner.pendingPlanRequest.note}
                 </p>
               )}
@@ -138,24 +138,24 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
             <CardContent className="space-y-4">
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <p className="text-xs text-gray-500">Name</p>
+                  <p className="text-xs text-muted-foreground">Name</p>
                   <p className="font-medium">{owner.name}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Phone</p>
+                  <p className="text-xs text-muted-foreground">Phone</p>
                   <p className="font-medium">{owner.phone}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Status</p>
+                  <p className="text-xs text-muted-foreground">Status</p>
                   <StatusBadge status={owner.status} />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Base Plan</p>
+                  <p className="text-xs text-muted-foreground">Base Plan</p>
                   <PlanBadge plan={owner.subscriptionPlan} />
                 </div>
                 {isTrialActive && owner.trial && (
                   <div>
-                    <p className="text-xs text-gray-500">Active Trial</p>
+                    <p className="text-xs text-muted-foreground">Active Trial</p>
                     <div className="flex items-center gap-2">
                       <PlanBadge plan={owner.trial.plan} />
                       <span className="text-xs text-muted-foreground">
@@ -166,11 +166,11 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                   </div>
                 )}
                 <div>
-                  <p className="text-xs text-gray-500">Joined</p>
+                  <p className="text-xs text-muted-foreground">Joined</p>
                   <p className="font-medium">{formatDate(owner.createdAt)}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500">Hostels</p>
+                  <p className="text-xs text-muted-foreground">Hostels</p>
                   <p className="font-medium">{owner.hostelsCount}</p>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
               </Button>
 
               <div className="space-y-2">
-                <p className="text-sm font-medium text-gray-700">
+                <p className="text-sm font-medium text-foreground">
                   Change Plan Manually
                 </p>
                 <Select
@@ -215,7 +215,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
               <div className="space-y-3 border-t border-border/50 pt-4">
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-primary" />
-                  <p className="text-sm font-medium text-gray-700">
+                  <p className="text-sm font-medium text-foreground">
                     Pro Trial
                   </p>
                 </div>
@@ -290,7 +290,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                       <TableCell>
                         <Link
                           href={`/hostels/${hostel.id}`}
-                          className="font-medium text-blue-600 hover:underline"
+                          className="font-medium text-primary hover:underline"
                         >
                           {hostel.name}
                         </Link>

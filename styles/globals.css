@@ -2,116 +2,115 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ─── Light theme (COLORS.light) ─── */
+/* ─── Light theme — OSSTEL logo palette ─── */
 :root,
 .light {
-  --background: #FCFCFC;
-  --foreground: #0A0A0A;
-  --card: #FCFCFC;
-  --card-foreground: #0A0A0A;
-  --popover: #FCFCFC;
-  --popover-foreground: #0A0A0A;
+  --background: #F4F7FC;
+  --foreground: #011627;
+  --card: #FFFFFF;
+  --card-foreground: #011627;
+  --popover: #FFFFFF;
+  --popover-foreground: #011627;
 
-  --primary: #5DB7DE;
+  --primary: #2979FF;
   --primary-foreground: #FFFFFF;
-  --primary-100: #EAF6FB;
-  --primary-200: #C4E5F3;
-  --primary-300: #9ED4EB;
+  --primary-100: #E8F0FF;
+  --primary-200: #C5D9FF;
+  --primary-300: #5C9AFF;
 
-  --secondary: #4EDCA3;
-  --secondary-foreground: #0A0A0A;
-  --secondary-100: #E6FAF2;
-  --secondary-200: #C0F2DE;
-  --secondary-300: #9AEBCA;
+  --secondary: #00C8E8;
+  --secondary-foreground: #011627;
+  --secondary-100: #E0FAFF;
+  --secondary-200: #B3F0FF;
+  --secondary-300: #66E5FF;
 
-  --muted: #E4E4E4;
-  --muted-foreground: #555555;
-  --accent: #EAF6FB;
-  --accent-foreground: #0A0A0A;
-  --border: rgba(228, 228, 228, 0.8);
-  --input: rgba(228, 228, 228, 0.6);
-  --ring: #5DB7DE;
+  --muted: #E2E8F2;
+  --muted-foreground: #4A5568;
+  --accent: #EDE7FF;
+  --accent-foreground: #011627;
+  --border: rgba(1, 22, 39, 0.1);
+  --input: rgba(1, 22, 39, 0.06);
+  --ring: #2979FF;
 
-  --success: #99DE9D;
-  --error: #E65047;
-  --warning: #EDA12F;
+  --success: #22C997;
+  --error: #EF4444;
+  --warning: #FFD740;
 
-  --sidebar: rgba(252, 252, 252, 0.55);
-  --sidebar-foreground: #0A0A0A;
+  --sidebar: rgba(255, 255, 255, 0.72);
+  --sidebar-foreground: #011627;
 
-  --gradient-from: #E6FAF2;
-  --gradient-mid: #EAF6FB;
-  --gradient-to: #F7FCFA;
+  --gradient-from: #EDE7FF;
+  --gradient-mid: #E8F0FF;
+  --gradient-to: #F4F7FC;
 
-  /* iOS glass tokens */
-  --glass-bg: rgba(252, 252, 252, 0.62);
-  --glass-bg-strong: rgba(255, 255, 255, 0.78);
-  --glass-border: rgba(255, 255, 255, 0.72);
-  --glass-border-subtle: rgba(228, 228, 228, 0.55);
+  --glass-bg: rgba(255, 255, 255, 0.72);
+  --glass-bg-strong: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-border-subtle: rgba(1, 22, 39, 0.08);
   --glass-shadow:
-    0 1px 1px rgba(255, 255, 255, 0.8) inset,
-    0 8px 32px rgba(93, 183, 222, 0.08),
-    0 2px 8px rgba(10, 10, 10, 0.04);
+    0 1px 1px rgba(255, 255, 255, 0.9) inset,
+    0 8px 32px rgba(41, 121, 255, 0.1),
+    0 2px 8px rgba(1, 22, 39, 0.04);
   --glass-blur: 24px;
 
-  --orb-primary: rgba(93, 183, 222, 0.28);
-  --orb-secondary: rgba(78, 220, 163, 0.22);
-  --orb-accent: rgba(234, 246, 251, 0.9);
+  --orb-primary: rgba(41, 121, 255, 0.28);
+  --orb-secondary: rgba(0, 229, 255, 0.2);
+  --orb-accent: rgba(179, 136, 255, 0.18);
 }
 
-/* ─── Dark theme (COLORS.dark) ─── */
+/* ─── Dark theme — OSSTEL logo palette ─── */
 .dark {
-  --background: #0A0A0A;
-  --foreground: #F5F5F5;
-  --card: #121212;
-  --card-foreground: #F5F5F5;
-  --popover: #121212;
-  --popover-foreground: #F5F5F5;
+  --background: #011627;
+  --foreground: #F0F4FA;
+  --card: #0A1E35;
+  --card-foreground: #F0F4FA;
+  --popover: #0A1E35;
+  --popover-foreground: #F0F4FA;
 
-  --primary: #6BC5E8;
-  --primary-foreground: #0A0A0A;
-  --primary-100: #1A2D38;
-  --primary-200: #243D4D;
-  --primary-300: #2E5068;
+  --primary: #4D9AFF;
+  --primary-foreground: #011627;
+  --primary-100: #0D2847;
+  --primary-200: #143458;
+  --primary-300: #1E4A75;
 
-  --secondary: #4EDCA3;
-  --secondary-foreground: #0A0A0A;
-  --secondary-100: #142820;
-  --secondary-200: #1C3830;
-  --secondary-300: #244838;
+  --secondary: #00E5FF;
+  --secondary-foreground: #011627;
+  --secondary-100: #0A2430;
+  --secondary-200: #0F3340;
+  --secondary-300: #154555;
 
-  --muted: #1A1A1A;
-  --muted-foreground: #A3A3A3;
-  --accent: #1A2D38;
-  --accent-foreground: #F5F5F5;
-  --border: rgba(255, 255, 255, 0.08);
+  --muted: #132D52;
+  --muted-foreground: #94A3B8;
+  --accent: #1E1638;
+  --accent-foreground: #F0F4FA;
+  --border: rgba(255, 255, 255, 0.1);
   --input: rgba(255, 255, 255, 0.06);
-  --ring: #6BC5E8;
+  --ring: #4D9AFF;
 
-  --success: #7AE67F;
-  --error: #FF6B63;
-  --warning: #F5B04A;
+  --success: #4ADE80;
+  --error: #FF6B6B;
+  --warning: #FFD740;
 
-  --sidebar: rgba(18, 18, 18, 0.62);
-  --sidebar-foreground: #F5F5F5;
+  --sidebar: rgba(10, 30, 53, 0.78);
+  --sidebar-foreground: #F0F4FA;
 
-  --gradient-from: #142820;
-  --gradient-mid: #1A2D38;
-  --gradient-to: #0D1210;
+  --gradient-from: #0F1A3D;
+  --gradient-mid: #0D2847;
+  --gradient-to: #011627;
 
-  --glass-bg: rgba(18, 18, 18, 0.58);
-  --glass-bg-strong: rgba(26, 26, 26, 0.82);
+  --glass-bg: rgba(10, 30, 53, 0.65);
+  --glass-bg-strong: rgba(13, 40, 71, 0.88);
   --glass-border: rgba(255, 255, 255, 0.12);
   --glass-border-subtle: rgba(255, 255, 255, 0.06);
   --glass-shadow:
     0 1px 1px rgba(255, 255, 255, 0.06) inset,
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(41, 121, 255, 0.08);
   --glass-blur: 28px;
 
-  --orb-primary: rgba(107, 197, 232, 0.15);
-  --orb-secondary: rgba(78, 220, 163, 0.12);
-  --orb-accent: rgba(26, 45, 56, 0.5);
+  --orb-primary: rgba(41, 121, 255, 0.22);
+  --orb-secondary: rgba(0, 229, 255, 0.14);
+  --orb-accent: rgba(179, 136, 255, 0.12);
 }
 
 @theme inline {
@@ -328,7 +327,7 @@ html.theme-transition-active .bg-brand-gradient {
   backdrop-filter: blur(32px) saturate(180%);
   -webkit-backdrop-filter: blur(32px) saturate(180%);
   border-right: 1px solid var(--glass-border-subtle);
-  box-shadow: 4px 0 24px rgba(93, 183, 222, 0.04);
+  box-shadow: 4px 0 24px rgba(41, 121, 255, 0.06);
   transition:
     background 0.5s ease,
     border-color 0.4s ease,
@@ -344,7 +343,7 @@ html.theme-transition-active .bg-brand-gradient {
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid var(--glass-border-subtle);
-  box-shadow: 0 4px 24px rgba(93, 183, 222, 0.05);
+  box-shadow: 0 4px 24px rgba(41, 121, 255, 0.08);
   transition:
     background 0.5s ease,
     border-color 0.4s ease,
@@ -358,7 +357,7 @@ html.theme-transition-active .bg-brand-gradient {
   border: 1px solid var(--glass-border);
   box-shadow:
     0 1px 0 rgba(255, 255, 255, 0.6) inset,
-    0 4px 16px rgba(93, 183, 222, 0.08);
+    0 4px 16px rgba(41, 121, 255, 0.12);
 }
 
 .glass-input {
@@ -391,7 +390,7 @@ html.theme-transition-active .bg-brand-gradient {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid color-mix(in srgb, var(--primary-200) 50%, transparent);
-  box-shadow: 0 2px 12px rgba(93, 183, 222, 0.15);
+  box-shadow: 0 2px 12px rgba(41, 121, 255, 0.18);
 }
 
 /* Legacy alias */
