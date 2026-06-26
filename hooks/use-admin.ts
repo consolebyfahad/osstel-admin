@@ -169,11 +169,15 @@ export function useApprovePlanRequest() {
   return useMutation({
     mutationFn: ({ id, adminNote }: { id: string; adminNote: string }) =>
       approvePlanRequest(id, adminNote),
-    onSuccess: () => {
+    onSuccess: (data) => {
       showApiSuccess("Plan request approved");
       queryClient.invalidateQueries({ queryKey: ["plan-requests"] });
       queryClient.invalidateQueries({ queryKey: ["owners"] });
       queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+      const ownerId = data.request?.owner?.id;
+      if (ownerId) {
+        queryClient.invalidateQueries({ queryKey: ["owner", ownerId] });
+      }
     },
     onError: showApiError,
   });
@@ -185,10 +189,14 @@ export function useRejectPlanRequest() {
   return useMutation({
     mutationFn: ({ id, adminNote }: { id: string; adminNote: string }) =>
       rejectPlanRequest(id, adminNote),
-    onSuccess: () => {
+    onSuccess: (data) => {
       showApiSuccess("Plan request rejected");
       queryClient.invalidateQueries({ queryKey: ["plan-requests"] });
       queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+      const ownerId = data.request?.owner?.id;
+      if (ownerId) {
+        queryClient.invalidateQueries({ queryKey: ["owner", ownerId] });
+      }
     },
     onError: showApiError,
   });

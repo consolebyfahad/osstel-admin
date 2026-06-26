@@ -38,6 +38,12 @@ import {
 } from "@/components/ui/select";
 import type { SubscriptionPlan } from "@/lib/types";
 
+const PLAN_LABELS: Record<SubscriptionPlan, string> = {
+  free: "Free",
+  standard: "Standard",
+  premium: "Pro",
+};
+
 interface OwnerDetailPageContentProps {
   id: string;
 }
@@ -50,6 +56,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
   const cancelTrialMutation = useCancelOwnerTrial();
   const extendMutation = useExtendOwnerSubscription();
   const [showBlockDialog, setShowBlockDialog] = useState(false);
+  const [pendingPlan, setPendingPlan] = useState<SubscriptionPlan | null>(null);
 
   const owner = data?.owner;
 
@@ -62,9 +69,15 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
     setShowBlockDialog(false);
   };
 
-  const handlePlanChange = async (plan: SubscriptionPlan) => {
-    if (!owner) return;
-    await planMutation.mutateAsync({ id: owner.id, plan });
+  const handlePlanChange = async () => {
+    if (!owner || !pendingPlan) return;
+    await planMutation.mutateAsync({ id: owner.id, plan: pendingPlan });
+    setPendingPlan(null);
+  };
+
+  const handlePlanSelect = (plan: SubscriptionPlan) => {
+    if (!owner || plan === owner.subscriptionPlan) return;
+    setPendingPlan(plan);
   };
 
   const handleGrantTrial = async (days: 10 | 20 | 30) => {
@@ -197,7 +210,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                     ) : null}
                   </div>
                 )}
-                {activeSubscription && (
+                {activeSubscription && !isTrialActive && (
                   <>
                     <div>
                       <p className="text-xs text-muted-foreground">
@@ -267,7 +280,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                 <Select
                   value={owner.subscriptionPlan}
                   onValueChange={(v) =>
-                    handlePlanChange(v as SubscriptionPlan)
+                    handlePlanSelect(v as SubscriptionPlan)
                   }
                   disabled={planMutation.isPending}
                 >
@@ -282,7 +295,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                 </Select>
               </div>
 
-              {activeSubscription && (
+              {activeSubscription && !isTrialActive && (
                 <div className="space-y-3 border-t border-border/50 pt-4">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4 text-primary" />
@@ -336,7 +349,8 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                 </div>
                 <p className="text-xs text-muted-foreground">
                   Grant temporary Pro access. After the trial ends, the owner
-                  returns to their base plan ({owner.subscriptionPlan}).
+                  returns to their base plan (
+                  {PLAN_LABELS[owner.baseSubscriptionPlan ?? "free"]}).
                 </p>
                 {isTrialActive && owner.trial ? (
                   <div className="space-y-2 rounded-lg border border-primary-200 bg-primary-100/40 p-3">
@@ -445,6 +459,22 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
         }
         onConfirm={handleBlock}
         isLoading={blockMutation.isPending}
+      />
+
+      <ConfirmDialog
+        open={pendingPlan !== null}
+        onOpenChange={(open) => {
+          if (!open) setPendingPlan(null);
+        }}
+        title="Change subscription plan?"
+        description={
+          pendingPlan
+            ? `This will set ${owner.name}'s plan to ${PLAN_LABELS[pendingPlan]} immediately with a new 30-day subscription period.`
+            : ""
+        }
+        confirmLabel="Change plan"
+        onConfirm={handlePlanChange}
+        isLoading={planMutation.isPending}
       />
     </>
   );
