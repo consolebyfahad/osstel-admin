@@ -4,9 +4,10 @@ export type SubscriptionPlan = "free" | "standard" | "premium";
 
 export interface TrialInfo {
   active: boolean;
-  plan: SubscriptionPlan;
   endsAt: string;
   daysRemaining: number;
+  /** @deprecated Trial is always Pro */
+  plan?: SubscriptionPlan;
 }
 
 export interface SubscriptionPeriodInfo {
@@ -81,6 +82,7 @@ export interface OwnerListItem {
   contactType?: "phone" | "email" | null;
   status: OwnerStatus;
   subscriptionPlan: SubscriptionPlan;
+  baseSubscriptionPlan?: SubscriptionPlan;
   effectivePlan?: SubscriptionPlan;
   trial?: TrialInfo | null;
   hostelsCount: number;
@@ -107,6 +109,7 @@ export interface OwnerDetail {
   contactType?: "phone" | "email" | null;
   status: OwnerStatus;
   subscriptionPlan: SubscriptionPlan;
+  baseSubscriptionPlan?: SubscriptionPlan;
   effectivePlan?: SubscriptionPlan;
   trial?: TrialInfo | null;
   subscription?: SubscriptionPeriodInfo | null;

@@ -175,13 +175,7 @@ export function OwnersPageContent() {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <PlanBadge
-                          plan={
-                            owner.trial?.active && owner.effectivePlan
-                              ? owner.effectivePlan
-                              : owner.subscriptionPlan
-                          }
-                        />
+                        <PlanBadge plan={owner.subscriptionPlan} />
                       </TableCell>
                       <TableCell>
                         <StatusBadge status={owner.status} />

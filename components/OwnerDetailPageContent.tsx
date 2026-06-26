@@ -176,20 +176,25 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
                   <StatusBadge status={owner.status} />
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground">Base Plan</p>
+                  <p className="text-xs text-muted-foreground">Current Plan</p>
                   <PlanBadge plan={owner.subscriptionPlan} />
                 </div>
                 {isTrialActive && owner.trial && (
                   <div>
-                    <p className="text-xs text-muted-foreground">Active Trial</p>
+                    <p className="text-xs text-muted-foreground">Pro Trial</p>
                     <div className="flex flex-wrap items-center gap-2">
                       <TrialBadge daysRemaining={owner.trial.daysRemaining} />
-                      <PlanBadge plan={owner.trial.plan} />
                       <span className="text-xs text-muted-foreground">
                         {owner.trial.daysRemaining} day
                         {owner.trial.daysRemaining === 1 ? "" : "s"} left
                       </span>
                     </div>
+                    {owner.baseSubscriptionPlan ? (
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Reverts to{" "}
+                        <PlanBadge plan={owner.baseSubscriptionPlan} />
+                      </p>
+                    ) : null}
                   </div>
                 )}
                 {activeSubscription && (
