@@ -8,7 +8,7 @@ import { Logo } from "@/components/Logo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { LIMITS } from "@/lib/limits";
 
 export function LoginForm() {
   const router = useRouter();
@@ -51,10 +51,11 @@ export function LoginForm() {
                   id="userId"
                   type="text"
                   value={userId}
-                  onChange={(e) => setUserId(e.target.value)}
+                  onChange={(e) => setUserId(e.target.value.slice(0, LIMITS.USER_ID_MAX))}
                   placeholder="Enter your user ID"
                   className="pl-9"
                   autoComplete="username"
+                  maxLength={LIMITS.USER_ID_MAX}
                   required
                 />
               </div>
@@ -68,10 +69,11 @@ export function LoginForm() {
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value.slice(0, LIMITS.PASSWORD_MAX))}
                   placeholder="Enter your password"
                   className="pl-9 pr-10"
                   autoComplete="current-password"
+                  maxLength={LIMITS.PASSWORD_MAX}
                   required
                 />
                 <button

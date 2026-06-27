@@ -30,8 +30,17 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (never commit secrets)
+.env
+.env.*
+!.env.example
+.env.local
+.env.*.local
+
+# Firebase / service accounts
+*-firebase-adminsdk-*.json
+service-account*.json
+google-services.json
 
 # vercel
 .vercel
