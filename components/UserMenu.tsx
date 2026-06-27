@@ -56,20 +56,20 @@ export function UserMenu() {
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/profile" className="cursor-pointer">
-            <User className="h-4 w-4 text-gray-500" />
+            <User className="h-4 w-4 text-muted-foreground" />
             Profile
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/profile" className="cursor-pointer">
-            <Settings className="h-4 w-4 text-gray-500" />
+            <Settings className="h-4 w-4 text-muted-foreground" />
             Account Settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleLogout}
-          className="cursor-pointer text-red-600 focus:text-red-600"
+          className="cursor-pointer text-error focus:text-error"
         >
           <LogOut className="h-4 w-4" />
           Logout

@@ -23,7 +23,7 @@ export function Pagination({
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-muted-foreground">
         Showing {start}–{end} of {total} results
       </p>
       <div className="flex items-center gap-2">
@@ -36,7 +36,7 @@ export function Pagination({
           <ChevronLeft className="h-4 w-4" />
           Previous
         </Button>
-        <span className="text-sm text-gray-600">
+        <span className="text-sm text-muted-foreground">
           Page {page} of {pages}
         </span>
         <Button

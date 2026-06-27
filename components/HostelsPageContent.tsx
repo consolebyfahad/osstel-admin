@@ -51,7 +51,7 @@ export function HostelsPageContent() {
       <div className="p-6 space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="relative flex-1 sm:max-w-sm">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="Search by name, city, or address..."
               value={searchInput}
@@ -94,27 +94,27 @@ export function HostelsPageContent() {
                   hostels.map((hostel) => (
                     <TableRow key={hostel.id}>
                       <TableCell>
-                        <p className="font-medium text-gray-900">{hostel.name}</p>
+                        <p className="font-medium text-foreground">{hostel.name}</p>
                       </TableCell>
                       <TableCell>
                         <p>{hostel.city}</p>
-                        <p className="text-xs text-gray-400">{hostel.address}</p>
+                        <p className="text-xs text-muted-foreground">{hostel.address}</p>
                       </TableCell>
                       <TableCell>
                         {hostel.owner ? (
                           <>
                             <Link
                               href={`/owners/${hostel.owner.id}`}
-                              className="text-blue-600 hover:underline"
+                              className="text-primary hover:underline"
                             >
                               {hostel.owner.name}
                             </Link>
-                            <p className="text-xs text-gray-400">
+                            <p className="text-xs text-muted-foreground">
                               {hostel.owner.phone || "—"}
                             </p>
                           </>
                         ) : (
-                          <span className="text-sm text-gray-400">Unknown owner</span>
+                          <span className="text-sm text-muted-foreground">Unknown owner</span>
                         )}
                       </TableCell>
                       <TableCell>

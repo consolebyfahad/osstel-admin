@@ -42,7 +42,7 @@ export function HostelDetailPageContent({ id }: HostelDetailPageContentProps) {
     return (
       <>
         <Navbar title="Hostel Details" />
-        <div className="p-6 text-center text-sm text-red-600">
+        <div className="p-6 text-center text-sm text-error">
           Hostel not found.
         </div>
       </>
@@ -86,23 +86,23 @@ export function HostelDetailPageContent({ id }: HostelDetailPageContentProps) {
             </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
               <div>
-                <p className="text-xs text-gray-500">Name</p>
+                <p className="text-xs text-muted-foreground">Name</p>
                 <p className="font-medium">{hostel.name}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Status</p>
+                <p className="text-xs text-muted-foreground">Status</p>
                 <StatusBadge status={hostel.status} />
               </div>
               <div>
-                <p className="text-xs text-gray-500">City</p>
+                <p className="text-xs text-muted-foreground">City</p>
                 <p className="font-medium">{hostel.city}</p>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Contact Phone</p>
+                <p className="text-xs text-muted-foreground">Contact Phone</p>
                 <p className="font-medium">{hostel.contactPhone}</p>
               </div>
               <div className="sm:col-span-2">
-                <p className="text-xs text-gray-500">Address</p>
+                <p className="text-xs text-muted-foreground">Address</p>
                 <p className="font-medium">{hostel.address}</p>
               </div>
             </CardContent>
@@ -114,25 +114,25 @@ export function HostelDetailPageContent({ id }: HostelDetailPageContentProps) {
             </CardHeader>
             <CardContent className="space-y-3">
               <div>
-                <p className="text-xs text-gray-500">Name</p>
+                <p className="text-xs text-muted-foreground">Name</p>
                 <Link
                   href={`/owners/${hostel.owner.id}`}
-                  className="font-medium text-blue-600 hover:underline"
+                  className="font-medium text-primary hover:underline"
                 >
                   {hostel.owner.name}
                 </Link>
               </div>
               <div>
-                <p className="text-xs text-gray-500">Phone</p>
+                <p className="text-xs text-muted-foreground">Phone</p>
                 <p className="font-medium">{hostel.owner.phone}</p>
               </div>
               <div className="flex gap-4">
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">Plan</p>
+                  <p className="text-xs text-muted-foreground mb-1">Plan</p>
                   <PlanBadge plan={hostel.owner.subscriptionPlan} />
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">Status</p>
+                  <p className="text-xs text-muted-foreground mb-1">Status</p>
                   <StatusBadge status={hostel.owner.status} />
                 </div>
               </div>

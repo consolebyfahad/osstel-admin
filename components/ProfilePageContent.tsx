@@ -76,7 +76,7 @@ export function ProfilePageContent() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-base">
-                <User className="h-4 w-4 text-blue-600" />
+                <User className="h-4 w-4 text-primary" />
                 Profile Information
               </CardTitle>
             </CardHeader>
@@ -172,7 +172,7 @@ export function ProfilePageContent() {
 
           <Card className="border-red-100">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-base text-red-700">
+              <CardTitle className="flex items-center gap-2 text-base text-error">
                 <LogOut className="h-4 w-4" />
                 Logout
               </CardTitle>

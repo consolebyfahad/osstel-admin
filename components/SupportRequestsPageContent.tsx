@@ -133,7 +133,7 @@ export function SupportRequestsPageContent() {
                         <TableCell>
                           {user ? (
                             <>
-                              <p className="font-medium">{user.name}</p>
+                              <p className="font-medium text-foreground">{user.name}</p>
                               <p className="text-xs text-muted-foreground">
                                 {user.phone}
                               </p>
