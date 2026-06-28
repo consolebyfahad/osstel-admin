@@ -2,9 +2,8 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ─── Light theme — OSSTEL logo palette ─── */
-:root,
-.light {
+/* ─── Light theme — Osstel logo palette ─── */
+:root {
   --background: #F4F7FC;
   --foreground: #011627;
   --card: #FFFFFF;
@@ -58,8 +57,9 @@
   --orb-accent: rgba(179, 136, 255, 0.18);
 }
 
-/* ─── Dark theme — OSSTEL logo palette ─── */
+/* ─── Dark theme — Osstel logo palette ─── */
 .dark {
+  color-scheme: dark;
   --background: #011627;
   --foreground: #F0F4FA;
   --card: #0A1E35;
@@ -305,6 +305,7 @@ html.theme-transition-active .bg-brand-gradient {
 }
 
 .glass-card {
+  color: var(--foreground);
   background:
     linear-gradient(
       145deg,
@@ -373,6 +374,30 @@ html.theme-transition-active .bg-brand-gradient {
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
 }
 
+.dark .glass-card {
+  color: #f4f4f4;
+}
+
+.dark .glass-card .text-foreground {
+  color: #f4f4f4;
+}
+
+.dark .glass-card .text-muted-foreground {
+  color: #94a3b8;
+}
+
+.dark .bg-card-gradient {
+  color: #f4f4f4;
+}
+
+.dark .bg-card-gradient .text-foreground {
+  color: #f4f4f4;
+}
+
+.dark .bg-card-gradient .text-muted-foreground {
+  color: #94a3b8;
+}
+
 .glass-nav-item-active {
   background: color-mix(in srgb, var(--primary-100) 90%, transparent);
   backdrop-filter: blur(12px);
@@ -395,6 +420,7 @@ html.theme-transition-active .bg-brand-gradient {
 
 /* Legacy alias */
 .bg-card-gradient {
+  color: var(--foreground);
   background:
     linear-gradient(
       145deg,

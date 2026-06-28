@@ -90,7 +90,7 @@ export function Sidebar({
         <Logo variant="icon" size="sm" />
         {!collapsed && (
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold text-foreground">OSSTEL Admin</p>
+            <p className="text-sm font-bold text-foreground">Osstel Admin</p>
             <p className="text-xs text-muted-foreground">Hostel Management</p>
           </div>
         )}

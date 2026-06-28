@@ -117,9 +117,7 @@ export function ContactInquiriesPageContent() {
                   inquiries.map((inquiry) => (
                     <TableRow key={inquiry.id}>
                       <TableCell>
-                        <p className="font-medium text-foreground">
-                          {inquiry.name}
-                        </p>
+                        <p className="font-medium">{inquiry.name}</p>
                         <p className="text-xs text-muted-foreground">
                           {inquiry.phone}
                         </p>
@@ -128,7 +126,7 @@ export function ContactInquiriesPageContent() {
                         </p>
                       </TableCell>
                       <TableCell>
-                        <p className="text-sm text-foreground/80 line-clamp-2">
+                        <p className="text-sm text-muted-foreground line-clamp-2">
                           {inquiry.message}
                         </p>
                       </TableCell>

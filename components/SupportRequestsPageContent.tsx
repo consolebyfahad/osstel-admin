@@ -123,7 +123,7 @@ export function SupportRequestsPageContent() {
                     return (
                       <TableRow key={request.id}>
                         <TableCell>
-                          <p className="font-medium text-foreground line-clamp-1">
+                          <p className="font-medium line-clamp-1">
                             {request.subject ?? "Support request"}
                           </p>
                           <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">
@@ -133,7 +133,7 @@ export function SupportRequestsPageContent() {
                         <TableCell>
                           {user ? (
                             <>
-                              <p className="font-medium text-foreground">{user.name}</p>
+                              <p className="font-medium">{user.name}</p>
                               <p className="text-xs text-muted-foreground">
                                 {user.phone}
                               </p>

@@ -94,7 +94,7 @@ export function HostelsPageContent() {
                   hostels.map((hostel) => (
                     <TableRow key={hostel.id}>
                       <TableCell>
-                        <p className="font-medium text-foreground">{hostel.name}</p>
+                        <p className="font-medium">{hostel.name}</p>
                       </TableCell>
                       <TableCell>
                         <p>{hostel.city}</p>

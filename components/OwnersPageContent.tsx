@@ -153,7 +153,7 @@ export function OwnersPageContent() {
                     <TableRow key={owner.id}>
                       <TableCell>
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="font-medium text-foreground">{owner.name}</p>
+                          <p className="font-medium">{owner.name}</p>
                           {owner.trial?.active && (
                             <TrialBadge
                               daysRemaining={owner.trial.daysRemaining}

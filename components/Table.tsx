@@ -9,12 +9,12 @@ export function Table({ children, className }: TableProps) {
   return (
     <div
       className={cn(
-        "overflow-hidden rounded-2xl glass-card",
+        "overflow-hidden rounded-2xl glass-card text-card-foreground",
         className
       )}
     >
       <div className="overflow-x-auto">
-        <table className="w-full text-sm">{children}</table>
+        <table className="w-full text-sm text-inherit">{children}</table>
       </div>
     </div>
   );
@@ -73,7 +73,7 @@ export function TableCell({
   className?: string;
 }) {
   return (
-    <td className={cn("px-4 py-3.5 text-foreground", className)}>{children}</td>
+    <td className={cn("px-4 py-3.5 text-inherit", className)}>{children}</td>
   );
 }
 

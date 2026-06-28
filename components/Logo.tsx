@@ -21,7 +21,7 @@ export function Logo({ variant = "full", size = "md", className }: LogoProps) {
     return (
       <Image
         src="/osstel.png"
-        alt="OSSTEL"
+        alt="Osstel"
         width={iconSize}
         height={iconSize}
         className={cn("object-contain", className)}
@@ -34,7 +34,7 @@ export function Logo({ variant = "full", size = "md", className }: LogoProps) {
   return (
     <Image
       src="/osstel.png"
-      alt="OSSTEL Admin"
+      alt="Osstel Admin"
       width={width}
       height={height}
       className={cn("object-contain", className)}
