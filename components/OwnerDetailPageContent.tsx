@@ -113,7 +113,7 @@ export function OwnerDetailPageContent({ id }: OwnerDetailPageContentProps) {
     return (
       <>
         <Navbar title="Owner Details" />
-        <div className="p-6 text-center text-sm text-error">
+        <div className="p-6 text-center text-sm text-red-600">
           Owner not found.
         </div>
       </>

@@ -121,36 +121,36 @@ export function PlanRequestsPageContent() {
                       <div>
                         <Link
                           href={`/owners/${request.owner.id}`}
-                          className="font-semibold text-foreground hover:text-primary"
+                          className="font-semibold text-gray-900 hover:text-blue-600"
                         >
                           {request.owner.name}
                         </Link>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-gray-500">
                           {request.owner.phone}
                         </p>
                       </div>
 
                       <div className="flex items-center gap-2 flex-wrap">
                         <PlanBadge plan={request.currentPlan} />
-                        <span className="text-muted-foreground">→</span>
+                        <span className="text-gray-400">→</span>
                         <PlanBadge plan={request.requestedPlan} />
                       </div>
 
                       {request.note && (
-                        <p className="text-sm text-foreground/80">
+                        <p className="text-sm text-gray-600">
                           <span className="font-medium">Owner note:</span>{" "}
                           {request.note}
                         </p>
                       )}
 
                       {request.adminNote && (
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-gray-500">
                           <span className="font-medium">Admin note:</span>{" "}
                           {request.adminNote}
                         </p>
                       )}
 
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-gray-400">
                         Requested on {formatDate(request.createdAt)}
                       </p>
                     </div>
@@ -180,8 +180,8 @@ export function PlanRequestsPageContent() {
                         className={cn(
                           "rounded-full px-3 py-1 text-xs font-medium capitalize",
                           request.status === "approved"
-                            ? "bg-success/15 text-success border border-success/30"
-                            : "bg-error/15 text-error border border-error/30"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
                         )}
                       >
                         {request.status}

@@ -79,7 +79,7 @@ export function OwnersPageContent() {
       <div className="p-6 space-y-6">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
           <div className="relative flex-1 sm:max-w-xs">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
             <Input
               placeholder="Search by name, phone, or email..."
               value={searchInput}
@@ -153,7 +153,7 @@ export function OwnersPageContent() {
                     <TableRow key={owner.id}>
                       <TableCell>
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="font-medium">{owner.name}</p>
+                          <p className="font-medium text-gray-900">{owner.name}</p>
                           {owner.trial?.active && (
                             <TrialBadge
                               daysRemaining={owner.trial.daysRemaining}
@@ -164,7 +164,7 @@ export function OwnersPageContent() {
                       </TableCell>
                       <TableCell>
                         <span
-                          className="text-sm text-muted-foreground"
+                          className="text-sm text-gray-700"
                           title={
                             owner.contactType === "email"
                               ? "Google sign-in"
@@ -196,12 +196,12 @@ export function OwnersPageContent() {
                           >
                             {owner.status === "active" ? (
                               <>
-                                <ShieldBan className="h-4 w-4 text-error" />
+                                <ShieldBan className="h-4 w-4 text-red-500" />
                                 Block
                               </>
                             ) : (
                               <>
-                                <ShieldCheck className="h-4 w-4 text-success" />
+                                <ShieldCheck className="h-4 w-4 text-green-600" />
                                 Unblock
                               </>
                             )}
