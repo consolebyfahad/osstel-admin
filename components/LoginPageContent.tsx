@@ -9,6 +9,8 @@ import { PageLoader } from "@/components/PageLoader";
 export function LoginPageContent() {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const user = useAuthStore((s) => s.user);
+  const logout = useAuthStore((s) => s.logout);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
@@ -16,10 +18,17 @@ export function LoginPageContent() {
   }, []);
 
   useEffect(() => {
-    if (hydrated && isAuthenticated()) {
+    if (!hydrated) return;
+
+    if (isAuthenticated() && user?.role === "admin") {
       router.replace("/dashboard");
+      return;
     }
-  }, [hydrated, isAuthenticated, router]);
+
+    if (isAuthenticated() && user && user.role !== "admin") {
+      logout();
+    }
+  }, [hydrated, isAuthenticated, user, logout, router]);
 
   if (!hydrated) {
     return <PageLoader className="min-h-screen" />;

@@ -4,6 +4,12 @@ import type { ApiResponse } from "@/lib/types";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+if (!BASE_URL && typeof window !== "undefined") {
+  console.error(
+    "[Osstel Admin] NEXT_PUBLIC_API_URL is not set. Copy .env.example to .env.local.",
+  );
+}
+
 const AUTH_PATHS_WITHOUT_REFRESH = new Set([
   "/auth/login",
   "/auth/register",
@@ -87,6 +93,12 @@ export async function apiClient<T>(
   options: RequestInit = {},
   hasRetried = false,
 ): Promise<T> {
+  if (!BASE_URL) {
+    throw new ApiError(
+      "API URL is not configured. Set NEXT_PUBLIC_API_URL in .env.local",
+    );
+  }
+
   const { accessToken } = useAuthStore.getState();
 
   const headers: Record<string, string> = {
@@ -120,6 +132,11 @@ export async function apiClient<T>(
 
     handleUnauthorized();
     throw new ApiError(json.message || "Unauthorized");
+  }
+
+  if (response.status === 403) {
+    handleUnauthorized();
+    throw new ApiError(json.message || "Forbidden");
   }
 
   if (!json.success) {

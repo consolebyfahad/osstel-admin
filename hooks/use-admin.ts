@@ -285,16 +285,9 @@ export function useContactInquiries(params: ContactInquiriesListParams) {
 }
 
 export function useContactInquiry(id: string) {
-  const queryClient = useQueryClient();
-
   return useQuery({
     queryKey: ["contact-inquiry", id],
-    queryFn: async () => {
-      const result = await getContactInquiry(id);
-      await queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
-      await queryClient.invalidateQueries({ queryKey: ["contact-inquiries"] });
-      return result;
-    },
+    queryFn: () => getContactInquiry(id),
     enabled: !!id,
   });
 }
@@ -329,7 +322,11 @@ export function useUpdateContactInquiryStatus() {
       id: string;
       adminReply?: string;
       status: ContactInquiryStatus;
-    }) => updateContactInquiryStatus(id, { status }),
+    }) =>
+      updateContactInquiryStatus(id, {
+        status,
+        ...(adminReply?.trim() ? { adminReply: adminReply.trim() } : {}),
+      }),
     onSuccess: (_, variables) => {
       showApiSuccess(
         variables.status === "closed"
